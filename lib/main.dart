@@ -1,4 +1,4 @@
-import 'package:angry_bird_game/main_screen.dart';
+// import 'package:angry_bird_game/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: MainMenu(),
+      // home: MainMenu(),
     );
   }
 }
