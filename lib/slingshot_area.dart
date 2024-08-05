@@ -7,16 +7,16 @@ class SlingshotArea extends StatefulWidget {
   // final Character character;
   final Function(Offset) onLaunch;
   const SlingshotArea({
-    Key? key,
+    super.key,
     // required this.character,
     required this.onLaunch,
-  }) : super(key: key);
+  });
 
   @override
-  _SlingshotAreaState createState() => _SlingshotAreaState();
+  SlingshotAreaState createState() => SlingshotAreaState();
 }
 
-class _SlingshotAreaState extends State<SlingshotArea> {
+class SlingshotAreaState extends State<SlingshotArea> {
   Offset _startPosition = Offset.zero;
   Offset _currentPosition = Offset.zero;
   bool _dragging = false;
