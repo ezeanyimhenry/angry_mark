@@ -1,0 +1,34 @@
+name: QA workflow
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: Quality Assurance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.22.3
+          channel: stable
+          architecture: x64
+
+      - name: Set up .env file
+        run: |
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" > .env
+
+      - name: Install dependencies
+        run: flutter pub get
+      # - name: Running tests without coverage
+      #   run: flutter test
+      # - name: Formatting lib folder
+      #   run: flutter format lib
+      - name: Running analysis on project
+        run: flutter analyze
+      - name: Building apk
+        run: flutter build apk
