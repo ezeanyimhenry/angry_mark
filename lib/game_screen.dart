@@ -1,14 +1,16 @@
-import 'package:angry_bird_game/character.dart';
-import 'package:angry_bird_game/obstacle.dart';
-import 'package:angry_bird_game/slingshot_area.dart';
+import 'package:angry_birds_ftg/character.dart';
+import 'package:angry_birds_ftg/obstacle.dart';
+import 'package:angry_birds_ftg/slingshot_area.dart';
 import 'package:flutter/material.dart';
 
 class GameScreen extends StatefulWidget {
+  const GameScreen({super.key});
+
   @override
-  _GameScreenState createState() => _GameScreenState();
+  GameScreenState createState() => GameScreenState();
 }
 
-class _GameScreenState extends State<GameScreen> {
+class GameScreenState extends State<GameScreen> {
   Character? _character;
   List<Obstacle> _obstacles = [];
 
@@ -16,14 +18,14 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
 
-    _character = Character(Offset(100, 300), Offset.zero, 40.0);
+    _character = Character(const Offset(100, 300), Offset.zero, 40.0);
     _character!.init().then((_) {
       setState(() {});
     });
 
     _obstacles = [
-      Obstacle(Rect.fromLTWH(250, 300, 50, 50)),
-      Obstacle(Rect.fromLTWH(350, 300, 50, 50)),
+      Obstacle(const Rect.fromLTWH(250, 300, 50, 50)),
+      Obstacle(const Rect.fromLTWH(350, 300, 50, 50)),
     ];
   }
 
@@ -75,7 +77,7 @@ class _GameScreenState extends State<GameScreen> {
               onPressed: () {
                 // Action for pause or menu button
               },
-              child: Text('Pause'),
+              child: const Text('Pause'),
             ),
           ),
           Positioned(
@@ -85,7 +87,7 @@ class _GameScreenState extends State<GameScreen> {
               onPressed: () {
                 // Action for restart button
               },
-              child: Text('Restart'),
+              child: const Text('Restart'),
             ),
           ),
         ],

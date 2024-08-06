@@ -1,9 +1,11 @@
-import 'package:angry_bird_game/game_screen.dart';
-import 'package:angry_bird_game/instructions_screen.dart';
-import 'package:angry_bird_game/settings_screen.dart';
+import 'package:angry_birds_ftg/game_screen.dart';
+// import 'package:angry_birds_ftg/instructions_screen.dart';
+// import 'package:angry_birds_ftg/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainMenu extends StatelessWidget {
+  const MainMenu({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +29,8 @@ class MainMenu extends StatelessWidget {
                     // Navigate to game screen
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => GameScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const GameScreen()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -48,11 +51,11 @@ class MainMenu extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () {
                     // Navigate to instructions screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => InstructionsScreen()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => InstructionsScreen()),
+                    // );
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(180, 50),
@@ -72,10 +75,10 @@ class MainMenu extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () {
                     // Navigate to settings screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SettingsScreen()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => SettingsScreen()),
+                    // );
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(180, 50),

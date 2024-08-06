@@ -1,14 +1,13 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-// import 'package:angry_bird_game/character.dart';
+import 'package:angry_birds_ftg/character.dart';
 
 class SlingshotArea extends StatefulWidget {
-  // final Character character;
+  final Character character;
   final Function(Offset) onLaunch;
   const SlingshotArea({
     super.key,
-    // required this.character,
+    required this.character,
     required this.onLaunch,
   });
 
