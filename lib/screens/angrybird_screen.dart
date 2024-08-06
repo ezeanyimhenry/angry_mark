@@ -4,7 +4,7 @@ import '../mythems/theme.dart';
 import '../widgets/birdcard_screen.dart';
 
 class CharacterScreen extends StatefulWidget {
-  const CharacterScreen({Key? key}) : super(key: key);
+  const CharacterScreen({super.key});
 
   @override
   State<CharacterScreen> createState() => _CharacterScreenState();
