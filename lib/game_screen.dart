@@ -18,9 +18,11 @@ class GameScreenState extends State<GameScreen> {
   List<Obstacle> _obstacles = [];
   bool _isLaunched = false;
   Timer? _timer;
-  Offset _backgroundOffset = Offset.zero;
   ui.Image? _backgroundImage;
-  Size? _screenSize;
+
+  double _zoomLevel = 0.8;
+  double _targetZoomLevel = 0.8;
+  double _zoomSpeed = 0.1; // Adjust for smooth zoom
 
   @override
   void initState() {
@@ -32,14 +34,14 @@ class GameScreenState extends State<GameScreen> {
     });
 
     _loadBackgroundImage();
-    // Positioning obstacles horizontally within the phone frame
+    // Positioning obstacles
     _obstacles = [
-      Obstacle(const Rect.fromLTWH(400, 400, 50, 50),
-          type: ObstacleType.glass), // Obstacle to the right of the slingshot
-      Obstacle(const Rect.fromLTWH(500, 400, 50, 50),
-          type: ObstacleType.wood), // Another obstacle further right
-      Obstacle(const Rect.fromLTWH(450, 350, 50, 50),
-          type: ObstacleType.wood), // Stacked obstacle
+      Obstacle(const Rect.fromLTWH(800, 400, 50, 50), type: ObstacleType.glass),
+      Obstacle(const Rect.fromLTWH(900, 400, 50, 50), type: ObstacleType.wood),
+      Obstacle(const Rect.fromLTWH(850, 350, 50, 50), type: ObstacleType.wood),
+      Obstacle(const Rect.fromLTWH(800, 300, 50, 50), type: ObstacleType.stone),
+      Obstacle(const Rect.fromLTWH(900, 300, 50, 50), type: ObstacleType.wood),
+      Obstacle(const Rect.fromLTWH(850, 250, 50, 50), type: ObstacleType.stone),
     ];
 
     _timer = Timer.periodic(const Duration(milliseconds: 16), (timer) {
@@ -57,6 +59,20 @@ class GameScreenState extends State<GameScreen> {
     });
   }
 
+  void _zoomIn() {
+    setState(() {
+      _targetZoomLevel = (_targetZoomLevel * 1.1)
+          .clamp(0.5, 2.0); // Zoom in by 10%, with limits
+    });
+  }
+
+  void _zoomOut() {
+    setState(() {
+      _targetZoomLevel = (_targetZoomLevel / 1.1)
+          .clamp(0.5, 2.0); // Zoom out by 10%, with limits
+    });
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -68,10 +84,12 @@ class GameScreenState extends State<GameScreen> {
       final double launchStrength = launchVector.distance;
       final Offset launchDirection = launchVector / launchStrength;
 
+      // Calculate zoom level based on drag strength
+      _targetZoomLevel = (1 + launchStrength / 100).clamp(0.5, 2.0);
+
       // Launch the character in the opposite direction of the drag
-      final initialVelocity = -launchDirection *
-          launchStrength *
-          0.5; // Adjust the factor as needed
+      final initialVelocity =
+          -launchDirection * launchStrength * 0.5; // Adjust factor as needed
       if (_character != null) {
         _character!.velocity = initialVelocity;
         _isLaunched = true;
@@ -96,45 +114,29 @@ class GameScreenState extends State<GameScreen> {
           }
         }
 
-        // Update the background offset based on character movement
-        _backgroundOffset = Offset(
-          _backgroundOffset.dx - _character!.velocity.dx,
-          _backgroundOffset.dy - _character!.velocity.dy,
-        );
+        // Ensure the character rolls at the bottom of the screen
+        final screenSize = MediaQuery.of(context).size;
+        if (_character!.position.dy > screenSize.height - _character!.radius) {
+          _character!.position = Offset(
+            _character!.position.dx,
+            screenSize.height - _character!.radius,
+          );
+          _character!.velocity =
+              Offset(_character!.velocity.dx * 0.8, 0); // Dampening effect
 
-        // Ensure background wraps around
-        if (_screenSize != null && _backgroundImage != null) {
-          final imageWidth = _backgroundImage!.width.toDouble();
-          final imageHeight = _backgroundImage!.height.toDouble();
+          // Reset zoom level to default after touching the ground
+          _zoomLevel = 0.8;
+          _targetZoomLevel = 0.8;
+        }
 
-          // Wrap around logic
-          if (_backgroundOffset.dx < 0) {
-            _backgroundOffset =
-                Offset(_backgroundOffset.dx + imageWidth, _backgroundOffset.dy);
-          } else if (_backgroundOffset.dx > imageWidth) {
-            _backgroundOffset =
-                Offset(_backgroundOffset.dx - imageWidth, _backgroundOffset.dy);
-          }
-
-          if (_backgroundOffset.dy < 0) {
-            _backgroundOffset = Offset(
-                _backgroundOffset.dx, _backgroundOffset.dy + imageHeight);
-          } else if (_backgroundOffset.dy > imageHeight) {
-            _backgroundOffset = Offset(
-                _backgroundOffset.dx, _backgroundOffset.dy - imageHeight);
-          }
+        // Smoothly adjust the zoom level
+        if ((_targetZoomLevel - _zoomLevel).abs() > _zoomSpeed) {
+          _zoomLevel += (_targetZoomLevel - _zoomLevel).sign * _zoomSpeed;
+        } else {
+          _zoomLevel = _targetZoomLevel;
         }
       });
     }
-  }
-
-  void _updateBackgroundOffset(Offset dragOffset) {
-    setState(() {
-      _backgroundOffset = Offset(
-        _backgroundOffset.dx + dragOffset.dx,
-        _backgroundOffset.dy + dragOffset.dy,
-      );
-    });
   }
 
   void _resetGame() {
@@ -145,16 +147,21 @@ class GameScreenState extends State<GameScreen> {
       });
 
       _obstacles = [
-        Obstacle(const Rect.fromLTWH(400, 400, 50, 50),
+        Obstacle(const Rect.fromLTWH(800, 400, 50, 50),
             type: ObstacleType.glass),
-        Obstacle(const Rect.fromLTWH(500, 400, 50, 50),
+        Obstacle(const Rect.fromLTWH(900, 400, 50, 50),
             type: ObstacleType.wood),
-        Obstacle(const Rect.fromLTWH(450, 350, 50, 50),
-            type: ObstacleType.glass),
+        Obstacle(const Rect.fromLTWH(850, 350, 50, 50),
+            type: ObstacleType.wood),
+        Obstacle(const Rect.fromLTWH(800, 300, 50, 50),
+            type: ObstacleType.stone),
+        Obstacle(const Rect.fromLTWH(900, 300, 50, 50),
+            type: ObstacleType.wood),
+        Obstacle(const Rect.fromLTWH(850, 250, 50, 50),
+            type: ObstacleType.stone),
       ];
 
       _isLaunched = false;
-      _backgroundOffset = Offset.zero; // Reset background position
     });
 
     _timer?.cancel();
@@ -163,41 +170,73 @@ class GameScreenState extends State<GameScreen> {
     });
   }
 
+  Future<void> _showQuitDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must tap a button to dismiss
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Quit Game'),
+          content: const Text('Are you sure you want to quit the game?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+            ),
+            TextButton(
+              child: const Text('Quit'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+                Navigator.of(context).pop(); // Close the game screen
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Background image
-          // Positioned.fill(
-          //   child: Image.asset(
-          //     'assets/images/game-background.jpeg',
-          //     fit: BoxFit.cover,
-          //   ),
-          // ),
           Positioned.fill(
             child: CustomPaint(
-              painter: GamePainter(_character, _obstacles, _backgroundImage,
-                  _backgroundOffset, _screenSize),
+              painter: GamePainter(
+                _character,
+                _obstacles,
+                _backgroundImage,
+                _zoomLevel,
+              ),
               child: SlingshotArea(
                 character: _character!,
                 onLaunch: _handleLaunch,
-                onDrag: (dragOffset) {
-                  // Optionally update the background offset based on drag
-                  _updateBackgroundOffset(dragOffset);
-                },
+                onDrag: (Offset) {},
               ),
             ),
           ),
           Positioned(
             top: 20,
             left: 20,
-            child: ElevatedButton(
-              onPressed: () {
-                // Action for pause or menu button
-                _timer?.cancel();
-              },
-              child: const Text('Pause'),
+            child: Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Action for pause or menu button
+                    _timer?.cancel();
+                  },
+                  child: const Text('Pause'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _showQuitDialog();
+                  },
+                  child: const Text('Quit Game'),
+                ),
+              ],
             ),
           ),
           Positioned(
@@ -210,6 +249,52 @@ class GameScreenState extends State<GameScreen> {
               child: const Text('Restart'),
             ),
           ),
+          Positioned(
+            bottom: 20,
+            right: 20,
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8), // Background color
+                    borderRadius: BorderRadius.circular(8), // Rounded corners
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.zoom_in),
+                    onPressed: _zoomIn,
+                    color: Colors.black, // Icon color
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8), // Background color
+                    borderRadius: BorderRadius.circular(8), // Rounded corners
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.zoom_out),
+                    onPressed: _zoomOut,
+                    color: Colors.black, // Icon color
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -220,41 +305,48 @@ class GamePainter extends CustomPainter {
   final Character? character;
   final List<Obstacle> obstacles;
   final ui.Image? backgroundImage;
-  final Offset backgroundOffset;
-  final Size? screenSize;
+  final double zoomLevel;
 
-  GamePainter(this.character, this.obstacles, this.backgroundImage,
-      this.backgroundOffset, this.screenSize);
+  GamePainter(
+    this.character,
+    this.obstacles,
+    this.backgroundImage,
+    this.zoomLevel,
+  );
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Draw background image
     if (backgroundImage != null) {
       final imageWidth = backgroundImage!.width.toDouble();
       final imageHeight = backgroundImage!.height.toDouble();
 
-      // Draw background image multiple times to cover the screen
+      final scale = zoomLevel;
+
       final paint = Paint();
-      final numImagesX = (size.width / imageWidth).ceil();
-      final numImagesY = (size.height / imageHeight).ceil();
+      final numImagesX = (size.width / (imageWidth * scale)).ceil();
+      final numImagesY = (size.height / (imageHeight * scale)).ceil();
 
       for (int x = 0; x < numImagesX; x++) {
         for (int y = 0; y < numImagesY; y++) {
-          final offsetX = (x * imageWidth) - backgroundOffset.dx % imageWidth;
-          final offsetY = (y * imageHeight) - backgroundOffset.dy % imageHeight;
+          final offsetX = x * imageWidth * scale;
+          final offsetY = y * imageHeight * scale;
           canvas.drawImageRect(
             backgroundImage!,
             Rect.fromLTWH(0, 0, imageWidth, imageHeight),
-            Rect.fromLTWH(offsetX, offsetY, imageWidth, imageHeight),
+            Rect.fromLTWH(
+                offsetX, offsetY, imageWidth * scale, imageHeight * scale),
             paint,
           );
         }
       }
     } else {
-      // Optional: Draw a solid color background if image is not loaded
       final paint = Paint()..color = Colors.blue;
       canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
     }
+
+    // Apply zoom effect by scaling the canvas
+    canvas.save();
+    canvas.scale(zoomLevel);
 
     if (character != null) {
       character!.draw(canvas);
@@ -263,6 +355,8 @@ class GamePainter extends CustomPainter {
     for (var obstacle in obstacles) {
       obstacle.draw(canvas);
     }
+
+    canvas.restore();
   }
 
   @override
