@@ -1,6 +1,7 @@
 import 'package:angry_mark/auth_screen.dart';
 import 'package:angry_mark/game_screen.dart';
 import 'package:angry_mark/instructions_screen.dart';
+import 'package:angry_mark/screens/angrybird_screen.dart';
 import 'package:angry_mark/settings_screen.dart';
 // import 'package:angry_mark/instructions_screen.dart';
 // import 'package:angry_mark/settings_screen.dart';
@@ -159,7 +160,7 @@ class MainMenu extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const SettingsScreen()),
+                                builder: (context) => const CharacterScreen()),
                           );
                         },
                         style: ElevatedButton.styleFrom(
@@ -172,7 +173,7 @@ class MainMenu extends StatelessWidget {
                         ),
                         icon: const Icon(Icons.settings, size: 24),
                         label: const Text(
-                          'Settings',
+                          'Characters',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
