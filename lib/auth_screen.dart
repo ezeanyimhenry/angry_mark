@@ -29,7 +29,7 @@ class _AuthScreenState extends State<AuthScreen> {
             const AnimatedImage(),
             const Text(
               'Welcome Back!',
-              style: TextStyle(color: AppColors.textLigth, fontSize: 30),
+              style: TextStyle(color: AppColors.textDark, fontSize: 30),
             ),
             Container(
               padding: const EdgeInsets.only(top: 10, right: 24, left: 24),
