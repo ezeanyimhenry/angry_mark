@@ -101,7 +101,7 @@ We welcome contributions! Please follow these steps to contribute:
 - [Download APK](https://drive.google.com/drive/folders/1Hv5Wq9nV_E2Iv5JVMCxFBhpSd3b-7VTw?usp=sharing)
 
 ### Appetize.io Demo
-- [Download APK]()
+- [Download APK](https://appetize.io/app/b_cljcqsvbyukhq5i2nri6mmq3vi)
 
 ## License
 
