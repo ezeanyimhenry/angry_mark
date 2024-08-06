@@ -11,7 +11,7 @@ class Character {
   Character(this.position, this.velocity, this.radius);
 
   Future<void> _loadImage() async {
-    final ByteData data = await rootBundle.load('assets/images/angry-bird.png');
+    final ByteData data = await rootBundle.load('assets/images/angry-mark.gif');
     final List<int> bytes = data.buffer.asUint8List();
     _image = await decodeImageFromList(Uint8List.fromList(bytes));
   }

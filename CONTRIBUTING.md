@@ -6,7 +6,7 @@ We appreciate your interest in contributing to the Angry Birds by HNG Flutter Te
 
 1. **Report Issues:**
 
-   If you encounter any bugs or have suggestions, please report them by opening an issue on the [GitHub Issues](https://github.com/ezeanyimhenry/angry_birds_ftg/issues) page.
+   If you encounter any bugs or have suggestions, please report them by opening an issue on the [GitHub Issues](https://github.com/ezeanyimhenry/angry_mark/issues) page.
 
 2. **Submit Code:**
 

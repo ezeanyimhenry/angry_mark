@@ -1,6 +1,6 @@
-import 'package:angry_birds_ftg/game_screen.dart';
-// import 'package:angry_birds_ftg/instructions_screen.dart';
-// import 'package:angry_birds_ftg/settings_screen.dart';
+import 'package:angry_mark/game_screen.dart';
+// import 'package:angry_mark/instructions_screen.dart';
+// import 'package:angry_mark/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainMenu extends StatelessWidget {

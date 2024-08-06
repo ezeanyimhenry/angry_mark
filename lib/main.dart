@@ -1,4 +1,4 @@
-import 'package:angry_birds_ftg/main_screen.dart';
+import 'package:angry_mark/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

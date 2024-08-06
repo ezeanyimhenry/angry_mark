@@ -1,6 +1,6 @@
-import 'package:angry_birds_ftg/character.dart';
-import 'package:angry_birds_ftg/obstacle.dart';
-import 'package:angry_birds_ftg/slingshot_area.dart';
+import 'package:angry_mark/character.dart';
+import 'package:angry_mark/obstacle.dart';
+import 'package:angry_mark/slingshot_area.dart';
 import 'package:flutter/material.dart';
 
 class GameScreen extends StatefulWidget {
@@ -61,6 +61,13 @@ class GameScreenState extends State<GameScreen> {
     return Scaffold(
       body: Stack(
         children: [
+          // Background image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/game-background.jpeg',
+              fit: BoxFit.cover,
+            ),
+          ),
           Positioned.fill(
             child: CustomPaint(
               painter: GamePainter(_character, _obstacles),
