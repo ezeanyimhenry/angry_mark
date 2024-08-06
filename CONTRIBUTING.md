@@ -1,12 +1,12 @@
-# Contributing to Angry Birds by HNG Flutter Team G
+# Contributing to Angry Mark by HNG Flutter Team G
 
-We appreciate your interest in contributing to the Angry Birds by HNG Flutter Team G. Here are some guidelines to help you get started.
+We appreciate your interest in contributing to the Angry Mark by HNG Flutter Team G. Here are some guidelines to help you get started.
 
 ## How to Contribute
 
 1. **Report Issues:**
 
-   If you encounter any bugs or have suggestions, please report them by opening an issue on the [GitHub Issues](https://github.com/ezeanyimhenry/angry_birds_ftg/issues) page.
+   If you encounter any bugs or have suggestions, please report them by opening an issue on the [GitHub Issues](https://github.com/ezeanyimhenry/angry_mark/issues) page.
 
 2. **Submit Code:**
 
@@ -51,7 +51,7 @@ For any questions or help, please reach out via GitHub or email.
 - **Email:** your-email@example.com
 - **GitHub:** [Your GitHub Profile](https://github.com/your-username) -->
 
-Thank you for contributing to the Angry Birds Game by HNG Flutter Team G!
+Thank you for contributing to the Angry Mark Game by HNG Flutter Team G!
 
 ---
 

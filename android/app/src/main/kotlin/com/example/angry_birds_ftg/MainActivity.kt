@@ -1,4 +1,4 @@
-package com.example.angry_birds_ftg
+package com.example.angry_mark
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,6 +1,7 @@
-import 'package:angry_birds_ftg/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'auth_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,11 +19,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Angry Birds Clone',
+      title: 'Angry Mark',
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const MainMenu(),
+      home: const AuthScreen(),
     );
   }
 }
