@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Angry Birds Clone',
+      title: 'Angry Mark',
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
