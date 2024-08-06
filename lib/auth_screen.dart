@@ -20,7 +20,9 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryBackground,
       appBar: AppBar(
+        backgroundColor: AppColors.primaryBackground,
         title: const Text('Login'),
       ),
       body: SingleChildScrollView(
@@ -29,7 +31,7 @@ class _AuthScreenState extends State<AuthScreen> {
             const AnimatedImage(),
             const Text(
               'Welcome Back!',
-              style: TextStyle(color: AppColors.textDark, fontSize: 30),
+              style: TextStyle(color: AppColors.textLigth, fontSize: 30),
             ),
             Container(
               padding: const EdgeInsets.only(top: 10, right: 24, left: 24),

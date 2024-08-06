@@ -22,6 +22,12 @@ class _AnimatedImageState extends State<AnimatedImage>
   ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
   @override
+  void dispose() {
+    _controller.dispose(); // Dispose of the controller
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SlideTransition(
       position: _animation,

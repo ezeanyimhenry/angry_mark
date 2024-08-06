@@ -23,6 +23,9 @@ class _SignupScreenState extends State<SignupScreen> {
     final topPadding = MediaQuery.of(context).padding.top;
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
+      appBar: AppBar(
+        backgroundColor: AppColors.primaryBackground,
+      ),
       body: SingleChildScrollView(
         child: SizedBox(
           width: double.infinity,
