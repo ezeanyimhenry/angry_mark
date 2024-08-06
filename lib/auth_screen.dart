@@ -100,7 +100,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     SizedBox(
                       height: 50,
                       width: MediaQuery.of(context).size.width,
-                      child: TextButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -113,11 +113,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               MaterialPageRoute(
                                   builder: (cxt) => const MainMenu()));
                         },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                            AppColors.cardColor,
-                          ),
-                        ),
+                      
                         child: const Text(
                           'SignIn',
                           style: TextStyle(
