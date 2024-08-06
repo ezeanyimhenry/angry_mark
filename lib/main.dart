@@ -1,4 +1,4 @@
-import 'package:angry_mark/main_screen.dart';
+import 'package:angry_mark/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const MainMenu(),
+      home: const SplashScreen(),
     );
   }
 }
