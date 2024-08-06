@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import '../mythems/theme.dart';
 import '../widgets/birdcard_screen.dart';
 
 class CharacterScreen extends StatefulWidget {
@@ -14,15 +12,12 @@ class _CharacterScreenState extends State<CharacterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 47, 68, 110),
       appBar: AppBar(
-        title: const Text('Angry Bird'),
-        backgroundColor: AppColors.cardDark,
-      ),
-      body: Scaffold(
         backgroundColor: const Color.fromARGB(255, 47, 68, 110),
-        body: Center(
-          child: BirdCard(),
-        ),
+      ),
+      body: Center(
+        child: BirdCard(),
       ),
     );
   }
