@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../mythems/theme.dart';
 
 class BirdCard extends StatelessWidget {
-  BirdCard({Key? key}) : super(key: key);
+  BirdCard({super.key});
 
   final List<Map<String, String>> cardData = [
     {
