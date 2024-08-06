@@ -13,6 +13,7 @@ class GameScreen extends StatefulWidget {
 class GameScreenState extends State<GameScreen> {
   Character? _character;
   List<Obstacle> _obstacles = [];
+  bool _isLaunched = false;
 
   @override
   void initState() {
@@ -31,16 +32,22 @@ class GameScreenState extends State<GameScreen> {
 
   void _handleLaunch(Offset launchVector) {
     setState(() {
-      final initialVelocity =
-          Offset(launchVector.dx * 0.5, launchVector.dy * 0.5);
+      final double launchStrength = launchVector.distance;
+      final Offset launchDirection = launchVector / launchStrength;
+
+      // Launch the character in the opposite direction of the drag
+      final initialVelocity = -launchDirection *
+          launchStrength *
+          0.5; // Adjust the factor as needed
       if (_character != null) {
         _character!.velocity = initialVelocity;
+        _isLaunched = true;
       }
     });
   }
 
   void updateGame() {
-    if (_character != null) {
+    if (_character != null && _isLaunched) {
       setState(() {
         _character!.update();
         // Check for collisions

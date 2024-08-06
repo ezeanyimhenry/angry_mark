@@ -14,7 +14,7 @@ class MainMenu extends StatelessWidget {
           // Background image
           Positioned.fill(
             child: Image.asset(
-              'assets/images/angry-birds-background.jpeg',
+              'assets/images/angry-mark-background.jpg',
               fit: BoxFit.cover,
             ),
           ),

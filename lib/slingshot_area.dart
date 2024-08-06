@@ -20,6 +20,14 @@ class SlingshotAreaState extends State<SlingshotArea> {
   Offset _currentPosition = Offset.zero;
   bool _dragging = false;
   bool _gameStarted = false;
+  late Offset _catapultBase;
+  final double _catapultWidth = 100.0;
+  final double _catapultHeight = 100.0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,22 +52,49 @@ class SlingshotAreaState extends State<SlingshotArea> {
           widget.onLaunch(launchVector);
         });
       },
-      child: Container(
-        width: double.infinity,
-        height: 100,
-        color:
-            _gameStarted ? Colors.transparent : Colors.black.withOpacity(0.6),
-        child: CustomPaint(
-          painter:
-              SlingshotPainter(_startPosition, _currentPosition, _dragging),
-          child: Center(
-            child: Text(
-              _gameStarted ? '' : 'Drag to Launch',
-              style: const TextStyle(color: Colors.white, fontSize: 20),
-            ),
+      child: LayoutBuilder(builder: (context, constraints) {
+        final catapultLeft = constraints.maxWidth / 2 - _catapultWidth / 2;
+        final catapultTop = constraints.maxHeight - _catapultHeight - 50;
+
+        _catapultBase = Offset(catapultLeft, catapultTop);
+
+        return SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: Stack(
+            children: [
+              // Background image for the catapult
+              Positioned(
+                bottom: 50,
+                left: catapultLeft,
+                child: Image.asset(
+                  'assets/images/catapult.png',
+                  width: _catapultWidth,
+                  height: _catapultHeight,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              CustomPaint(
+                painter: SlingshotPainter(
+                  _startPosition,
+                  _currentPosition,
+                  _dragging,
+                  _catapultBase,
+                  Size(constraints.maxWidth, constraints.maxHeight),
+                  _catapultWidth,
+                  _catapultHeight,
+                ),
+                child: Center(
+                  child: Text(
+                    _gameStarted ? '' : 'Drag to Launch',
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }
@@ -68,26 +103,38 @@ class SlingshotPainter extends CustomPainter {
   final Offset startPosition;
   final Offset currentPosition;
   final bool dragging;
+  final Offset catapultBase;
+  final Size screenSize;
+  final double catapultWidth;
+  final double catapultHeight;
 
-  SlingshotPainter(this.startPosition, this.currentPosition, this.dragging);
+  SlingshotPainter(
+    this.startPosition,
+    this.currentPosition,
+    this.dragging,
+    this.catapultBase,
+    this.screenSize,
+    this.catapultWidth,
+    this.catapultHeight,
+  );
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.red
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.0;
-
-    // Draw slingshot base
-    canvas.drawLine(
-      Offset(size.width / 2 - 50, size.height),
-      Offset(size.width / 2 + 50, size.height),
-      paint,
-    );
-
     if (dragging) {
-      // Draw drag line
-      canvas.drawLine(startPosition, currentPosition, paint);
+      final paint = Paint()
+        ..color = Colors.black
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 3.0;
+
+      // Calculate edges of the catapult image
+      final catapultLeftEdge =
+          Offset(catapultBase.dx, catapultBase.dy + catapultHeight / 2);
+      final catapultRightEdge = Offset(catapultBase.dx + catapultWidth,
+          catapultBase.dy + catapultHeight / 2);
+
+      // Draw drag lines from edges
+      canvas.drawLine(catapultLeftEdge, currentPosition, paint);
+      canvas.drawLine(catapultRightEdge, currentPosition, paint);
     }
   }
 
