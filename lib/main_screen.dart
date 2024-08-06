@@ -53,7 +53,7 @@ class MainMenu extends StatelessWidget {
           Positioned(
             bottom: 20,
             left: 20,
-            child: ElevatedButton.icon(
+            child: ElevatedButton(
               onPressed: () {
                 // Navigate to instructions screen
                 Navigator.push(
@@ -63,18 +63,12 @@ class MainMenu extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(150, 50),
                 backgroundColor: Colors.orange,
                 foregroundColor: Colors.white,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                padding: const EdgeInsets.all(10),
                 textStyle: const TextStyle(fontSize: 16),
               ),
-              icon: const Icon(Icons.help, size: 24),
-              label: const Text(
-                'Instructions',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              child: const Icon(Icons.help, size: 24),
             ),
           ),
           // Profile image & settings icon
