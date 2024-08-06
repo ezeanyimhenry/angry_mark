@@ -22,7 +22,7 @@ class GameScreenState extends State<GameScreen> {
 
   double _zoomLevel = 0.8;
   double _targetZoomLevel = 0.8;
-  double _zoomSpeed = 0.1; // Adjust for smooth zoom
+  final double _zoomSpeed = 0.1; // Adjust for smooth zoom
 
   @override
   void initState() {
@@ -214,6 +214,7 @@ class GameScreenState extends State<GameScreen> {
               child: SlingshotArea(
                 character: _character!,
                 onLaunch: _handleLaunch,
+                // ignore: avoid_types_as_parameter_names, non_constant_identifier_names
                 onDrag: (Offset) {},
               ),
             ),
@@ -263,12 +264,12 @@ class GameScreenState extends State<GameScreen> {
                       BoxShadow(
                         color: Colors.black.withOpacity(0.3),
                         blurRadius: 4,
-                        offset: Offset(0, 2),
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
                   child: IconButton(
-                    icon: Icon(Icons.zoom_in),
+                    icon: const Icon(Icons.zoom_in),
                     onPressed: _zoomIn,
                     color: Colors.black, // Icon color
                   ),
@@ -282,12 +283,12 @@ class GameScreenState extends State<GameScreen> {
                       BoxShadow(
                         color: Colors.black.withOpacity(0.3),
                         blurRadius: 4,
-                        offset: Offset(0, 2),
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
                   child: IconButton(
-                    icon: Icon(Icons.zoom_out),
+                    icon: const Icon(Icons.zoom_out),
                     onPressed: _zoomOut,
                     color: Colors.black, // Icon color
                   ),
