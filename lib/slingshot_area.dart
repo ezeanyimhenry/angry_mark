@@ -5,10 +5,12 @@ import 'package:angry_mark/character.dart';
 class SlingshotArea extends StatefulWidget {
   final Character character;
   final Function(Offset) onLaunch;
+  final Function(Offset) onDrag; // Add this callback
   const SlingshotArea({
     super.key,
     required this.character,
     required this.onLaunch,
+    required this.onDrag,
   });
 
   @override
@@ -24,6 +26,7 @@ class SlingshotAreaState extends State<SlingshotArea> {
   final double _catapultWidth = 100.0;
   final double _catapultHeight = 100.0;
   final double _maxDragDistance = 100.0;
+  final double _catapultOffset = 50.0;
 
   @override
   void initState() {
@@ -47,8 +50,12 @@ class SlingshotAreaState extends State<SlingshotArea> {
           if (offset.distance <= _maxDragDistance) {
             _currentPosition = details.localPosition;
           } else {
-            _currentPosition = _startPosition + (offset / offset.distance) * _maxDragDistance;
+            _currentPosition =
+                _startPosition + (offset / offset.distance) * _maxDragDistance;
           }
+
+          // Pass drag offset to background updater
+          widget.onDrag(details.globalPosition - _startPosition);
         });
       },
       onPanEnd: (details) {
@@ -59,7 +66,7 @@ class SlingshotAreaState extends State<SlingshotArea> {
         });
       },
       child: LayoutBuilder(builder: (context, constraints) {
-        final catapultLeft = constraints.maxWidth / 2 - _catapultWidth / 2;
+        final catapultLeft = _catapultOffset;
         final catapultTop = constraints.maxHeight - _catapultHeight - 50;
 
         _catapultBase = Offset(catapultLeft, catapultTop);
@@ -132,13 +139,11 @@ class SlingshotPainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = 3.0;
 
-      // Calculate edges of the catapult image
       final catapultLeftEdge =
           Offset(catapultBase.dx, catapultBase.dy + catapultHeight / 2);
       final catapultRightEdge = Offset(catapultBase.dx + catapultWidth,
           catapultBase.dy + catapultHeight / 2);
 
-      // Draw drag lines from edges
       canvas.drawLine(catapultLeftEdge, currentPosition, paint);
       canvas.drawLine(catapultRightEdge, currentPosition, paint);
     }
@@ -149,7 +154,6 @@ class SlingshotPainter extends CustomPainter {
     return true;
   }
 }
-
 
 
 

@@ -60,7 +60,6 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, Uint8List, rootBundle;
 import 'dart:ui' as ui;
@@ -71,8 +70,10 @@ class Character {
   final double radius;
   ui.Image? _image;
 
-  static const double gravity = 0.5; // Gravity constant
-  static const double groundLevel = 600.0; // Adjust this to your screen's ground level
+  static const double gravity = 0.98; // Gravity constant
+  static const double groundLevel =
+      600.0; // Adjust this to your screen's ground level
+  static const double friction = 0.98;
 
   Character(this.position, this.velocity, this.radius);
 
@@ -86,22 +87,28 @@ class Character {
     // Apply gravity to vertical velocity
     velocity = Offset(velocity.dx, velocity.dy + gravity);
 
+    // Apply friction to horizontal velocity
+    velocity = Offset(velocity.dx * friction, velocity.dy);
+
     // Update position based on velocity
     position = Offset(position.dx + velocity.dx, position.dy + velocity.dy);
 
     // Check if the character has hit the ground
     if (position.dy + radius > groundLevel) {
       position = Offset(position.dx, groundLevel - radius);
-      velocity = Offset(velocity.dx, 0); // Stop vertical movement, but horizontal movement continues
+      velocity = Offset(velocity.dx,
+          0); // Stop vertical movement, but horizontal movement continues
     }
 
     // Check for left and right boundaries
     if (position.dx - radius < 0) {
       position = Offset(radius, position.dy);
-      velocity = Offset(-velocity.dx, velocity.dy); // Reverse horizontal velocity
+      velocity =
+          Offset(-velocity.dx, velocity.dy); // Reverse horizontal velocity
     } else if (position.dx + radius > screenSize.width) {
       position = Offset(screenSize.width - radius, position.dy);
-      velocity = Offset(-velocity.dx, velocity.dy); // Reverse horizontal velocity
+      velocity =
+          Offset(-velocity.dx, velocity.dy); // Reverse horizontal velocity
     }
 
     // Check for top boundary
