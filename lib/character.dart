@@ -1,3 +1,66 @@
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart' show ByteData, Uint8List, rootBundle;
+// import 'dart:ui' as ui;
+
+// class Character {
+//   Offset position;
+//   Offset velocity;
+//   final double radius;
+//   ui.Image? _image;
+
+//   static const double gravity = 0.5; // Gravity constant
+//   static const double groundLevel =
+//       600.0; // Adjust this to your screen's ground level
+
+//   Character(this.position, this.velocity, this.radius);
+
+//   Future<void> _loadImage() async {
+//     final ByteData data = await rootBundle.load('assets/images/char1.png');
+//     final List<int> bytes = data.buffer.asUint8List();
+//     _image = await decodeImageFromList(Uint8List.fromList(bytes));
+//   }
+
+//   void update() {
+//     // Apply gravity to vertical velocity
+//     velocity = Offset(velocity.dx, velocity.dy + gravity);
+
+//     // Update position based on velocity
+//     position = Offset(position.dx + velocity.dx, position.dy + velocity.dy);
+
+//     // Check if the character has hit the ground
+//     if (position.dy + radius > groundLevel) {
+//       position = Offset(position.dx, groundLevel - radius);
+//       velocity = Offset(velocity.dx,
+//           0); // Stop vertical movement, but horizontal movement continues
+//     }
+//   }
+
+//   void draw(Canvas canvas) {
+//     if (_image == null) {
+//       return;
+//     }
+
+//     final paint = Paint();
+//     final Rect destRect = Rect.fromCenter(
+//       center: position,
+//       width: radius * 2,
+//       height: radius * 2,
+//     );
+
+//     canvas.drawImageRect(
+//       _image!,
+//       Rect.fromLTWH(0, 0, _image!.width.toDouble(), _image!.height.toDouble()),
+//       destRect,
+//       paint,
+//     );
+//   }
+
+//   Future<void> init() async {
+//     await _loadImage();
+//   }
+// }
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, Uint8List, rootBundle;
 import 'dart:ui' as ui;
@@ -9,8 +72,7 @@ class Character {
   ui.Image? _image;
 
   static const double gravity = 0.5; // Gravity constant
-  static const double groundLevel =
-      600.0; // Adjust this to your screen's ground level
+  static const double groundLevel = 600.0; // Adjust this to your screen's ground level
 
   Character(this.position, this.velocity, this.radius);
 
@@ -30,8 +92,7 @@ class Character {
     // Check if the character has hit the ground
     if (position.dy + radius > groundLevel) {
       position = Offset(position.dx, groundLevel - radius);
-      velocity = Offset(velocity.dx,
-          0); // Stop vertical movement, but horizontal movement continues
+      velocity = Offset(velocity.dx, 0); // Stop vertical movement, but horizontal movement continues
     }
   }
 
@@ -53,6 +114,10 @@ class Character {
       destRect,
       paint,
     );
+  }
+
+  Rect getBounds() {
+    return Rect.fromCircle(center: position, radius: radius);
   }
 
   Future<void> init() async {
