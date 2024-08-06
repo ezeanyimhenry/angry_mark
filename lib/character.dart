@@ -82,7 +82,7 @@ class Character {
     _image = await decodeImageFromList(Uint8List.fromList(bytes));
   }
 
-  void update() {
+  void update(Size screenSize) {
     // Apply gravity to vertical velocity
     velocity = Offset(velocity.dx, velocity.dy + gravity);
 
@@ -93,6 +93,21 @@ class Character {
     if (position.dy + radius > groundLevel) {
       position = Offset(position.dx, groundLevel - radius);
       velocity = Offset(velocity.dx, 0); // Stop vertical movement, but horizontal movement continues
+    }
+
+    // Check for left and right boundaries
+    if (position.dx - radius < 0) {
+      position = Offset(radius, position.dy);
+      velocity = Offset(-velocity.dx, velocity.dy); // Reverse horizontal velocity
+    } else if (position.dx + radius > screenSize.width) {
+      position = Offset(screenSize.width - radius, position.dy);
+      velocity = Offset(-velocity.dx, velocity.dy); // Reverse horizontal velocity
+    }
+
+    // Check for top boundary
+    if (position.dy - radius < 0) {
+      position = Offset(position.dx, radius);
+      velocity = Offset(velocity.dx, -velocity.dy); // Reverse vertical velocity
     }
   }
 
@@ -116,11 +131,11 @@ class Character {
     );
   }
 
-  Rect getBounds() {
-    return Rect.fromCircle(center: position, radius: radius);
-  }
-
   Future<void> init() async {
     await _loadImage();
+  }
+
+  Rect getBounds() {
+    return Rect.fromCircle(center: position, radius: radius);
   }
 }

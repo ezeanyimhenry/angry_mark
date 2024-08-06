@@ -162,9 +162,11 @@ class GameScreenState extends State<GameScreen> {
       setState(() {});
     });
 
+    // Positioning obstacles horizontally within the phone frame
     _obstacles = [
-      Obstacle(const Rect.fromLTWH(250, 300, 50, 50), type: ObstacleType.wood),
-      Obstacle(const Rect.fromLTWH(350, 300, 50, 50), type: ObstacleType.stone),
+      Obstacle(const Rect.fromLTWH(400, 400, 50, 50), type: ObstacleType.glass), // Obstacle to the right of the slingshot
+      Obstacle(const Rect.fromLTWH(500, 400, 50, 50), type: ObstacleType.wood), // Another obstacle further right
+      Obstacle(const Rect.fromLTWH(450, 350, 50, 50), type: ObstacleType.wood), // Stacked obstacle
     ];
 
     _timer = Timer.periodic(const Duration(milliseconds: 16), (timer) {
@@ -184,9 +186,7 @@ class GameScreenState extends State<GameScreen> {
       final Offset launchDirection = launchVector / launchStrength;
 
       // Launch the character in the opposite direction of the drag
-      final initialVelocity = -launchDirection *
-          launchStrength *
-          0.5; // Adjust the factor as needed
+      final initialVelocity = -launchDirection * launchStrength * 0.5; // Adjust the factor as needed
       if (_character != null) {
         _character!.velocity = initialVelocity;
         _isLaunched = true;
@@ -197,10 +197,7 @@ class GameScreenState extends State<GameScreen> {
   void updateGame() {
     if (_character != null && _isLaunched) {
       setState(() {
-        _character!.update();
-
-        // Apply gravity
-        _character!.velocity += const Offset(0, 0.5); // Adjust gravity as needed
+        _character!.update(MediaQuery.of(context).size); // Pass screen size to update method
 
         // Check for collisions
         for (var obstacle in _obstacles) {
@@ -259,9 +256,11 @@ class GameScreenState extends State<GameScreen> {
                     setState(() {});
                   });
 
+                  // Reset obstacles to their initial positions
                   _obstacles = [
-                    Obstacle(const Rect.fromLTWH(250, 300, 50, 50), type: ObstacleType.wood),
-                    Obstacle(const Rect.fromLTWH(350, 300, 50, 50), type: ObstacleType.stone),
+                    Obstacle(const Rect.fromLTWH(400, 400, 50, 50), type: ObstacleType.glass),
+                    Obstacle(const Rect.fromLTWH(500, 400, 50, 50), type: ObstacleType.wood),
+                    Obstacle(const Rect.fromLTWH(450, 350, 50, 50), type: ObstacleType.glass),
                   ];
 
                   _isLaunched = false;
