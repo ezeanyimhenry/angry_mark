@@ -26,8 +26,9 @@ class _AnimatedImageState extends State<AnimatedImage>
     return SlideTransition(
       position: _animation,
       child: Image.asset(
-        'assets/images/angrybird/Hatclings_Movie.png',
+        'assets/images/angry-mark.gif',
         width: 300,
+        height: 100,
       ),
     );
   }

@@ -32,7 +32,7 @@ class _AuthScreenState extends State<AuthScreen> {
               style: TextStyle(color: AppColors.textLigth, fontSize: 30),
             ),
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.only(top: 10, right: 24, left: 24),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -113,7 +113,6 @@ class _AuthScreenState extends State<AuthScreen> {
                               MaterialPageRoute(
                                   builder: (cxt) => const MainMenu()));
                         },
-                      
                         child: const Text(
                           'SignIn',
                           style: TextStyle(
