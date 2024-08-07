@@ -1,3 +1,6 @@
+import 'package:angry_mark/email_field.dart';
+import 'package:angry_mark/forgot_password_screen.dart';
+import 'package:angry_mark/password_field.dart';
 import 'package:flutter/material.dart';
 
 import '../home_screen.dart';
@@ -17,127 +20,113 @@ class _AuthScreenState extends State<AuthScreen> {
   TextEditingController password = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+  var _isVisible = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
       appBar: AppBar(
         backgroundColor: AppColors.primaryBackground,
+        foregroundColor: AppColors.textLigth,
         title: const Text('Login'),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const AnimatedImage(),
-            const Text(
-              'Welcome Back!',
-              style: TextStyle(color: AppColors.textLigth, fontSize: 30),
-            ),
-            Container(
-              padding: const EdgeInsets.only(top: 10, right: 24, left: 24),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    //for Email Field
-                    TextFormField(
-                      controller: email,
-                      // The validator receives the text that the user has entered.
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Colors.grey),
-                        ),
-                        labelText: 'Email',
-                        labelStyle: TextStyle(color: AppColors.textFaded),
+        child: SafeArea(
+          child: Column(
+            children: [
+              const AnimatedImage(),
+              const Text(
+                'Welcome Back!',
+                style: TextStyle(color: AppColors.textLigth, fontSize: 30),
+              ),
+              Container(
+                padding: const EdgeInsets.only(top: 10, right: 24, left: 24),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 20,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-
-                    //for password Field
-                    TextFormField(
-                      controller: password,
-
-                      // The validator receives the text that the user has entered.
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Colors.grey),
-                        ),
-                        labelText: 'Password',
-                        labelStyle: TextStyle(color: AppColors.textFaded),
+                      //for Email Field
+                      EmailField(emailController: email),
+                      const SizedBox(
+                        height: 20,
                       ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () {},
-                            child: const Text('Forgot password?'),
+                      PasswordField(
+                        passwordController: password,
+                        onPressed: () =>
+                            setState(() => _isVisible = !_isVisible),
+                        isVisible: _isVisible,
+                      ),
+                      SizedBox(
+                        height: 40,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgotPasswordScreen(),
+                                ),
+                              ),
+                              child: const Text(
+                                'Forgot password?',
+                                style: TextStyle(color: AppColors.textLigth),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Processing Data')),
+                              );
+                            }
+
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (cxt) => const HomeScreen()));
+                          },
+                          child: const Text(
+                            'SignIn',
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 70,
-                    ),
-                    SizedBox(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      child: ElevatedButton(
+                      TextButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Processing Data')),
-                            );
-                          }
-
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (cxt) => const HomeScreen()));
+                                  builder: (cxt) => const SignupScreen()));
                         },
                         child: const Text(
-                          'SignIn',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          "Don't Have a Account? SignUp",
+                          style: TextStyle(color: AppColors.textLigth),
                         ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (cxt) => const SignupScreen()));
-                      },
-                      child: const Text("Don't Have a Account? SignUp"),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

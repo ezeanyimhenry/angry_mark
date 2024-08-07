@@ -1,3 +1,4 @@
+import 'package:angry_mark/mythems/theme.dart';
 import 'package:angry_mark/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +22,8 @@ class MyApp extends StatelessWidget {
       title: 'Angry Mark',
       theme: ThemeData(
         primarySwatch: Colors.green,
+        inputDecorationTheme: InputDecorTheme.inputDecorTheme,
+        elevatedButtonTheme: AppElevatedButtonTheme.appElevatedButtonTheme
       ),
       home: const SplashScreen(),
     );
