@@ -1,4 +1,6 @@
+import 'package:angry_mark/email_field.dart';
 import 'package:angry_mark/forgot_password_screen.dart';
+import 'package:angry_mark/password_field.dart';
 import 'package:flutter/material.dart';
 
 import 'main_screen.dart';
@@ -18,6 +20,8 @@ class _AuthScreenState extends State<AuthScreen> {
   TextEditingController password = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+  var _isVisible = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,48 +49,15 @@ class _AuthScreenState extends State<AuthScreen> {
                         height: 20,
                       ),
                       //for Email Field
-                      TextFormField(
-                        controller: email,
-                        // The validator receives the text that the user has entered.
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 1, color: Colors.grey),
-                          ),
-                          labelText: 'Email',
-                          labelStyle: TextStyle(color: AppColors.textFaded),
-                        ),
-                      ),
+                      EmailField(emailController: email),
                       const SizedBox(
                         height: 20,
                       ),
-
-                      //for password Field
-                      TextFormField(
-                        controller: password,
-
-                        // The validator receives the text that the user has entered.
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 1, color: Colors.grey),
-                          ),
-                          labelText: 'Password',
-                          labelStyle: TextStyle(color: AppColors.textFaded),
-                        ),
+                      PasswordField(
+                        passwordController: password,
+                        onPressed: () =>
+                            setState(() => _isVisible = !_isVisible),
+                        isVisible: _isVisible,
                       ),
                       SizedBox(
                         height: 40,
