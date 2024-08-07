@@ -28,6 +28,7 @@ class _AuthScreenState extends State<AuthScreen> {
       backgroundColor: AppColors.primaryBackground,
       appBar: AppBar(
         backgroundColor: AppColors.primaryBackground,
+        foregroundColor: AppColors.textLigth,
         title: const Text('Login'),
       ),
       body: SingleChildScrollView(
@@ -71,17 +72,20 @@ class _AuthScreenState extends State<AuthScreen> {
                                       const ForgotPasswordScreen(),
                                 ),
                               ),
-                              child: const Text('Forgot password?'),
+                              child: const Text(
+                                'Forgot password?',
+                                style: TextStyle(color: AppColors.textLigth),
+                              ),
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(
-                        height: 70,
+                        height: 30,
                       ),
                       SizedBox(
                         height: 50,
-                        width: MediaQuery.of(context).size.width * 0.5,
+                        width: MediaQuery.of(context).size.width * 0.3,
                         child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
@@ -112,7 +116,10 @@ class _AuthScreenState extends State<AuthScreen> {
                               MaterialPageRoute(
                                   builder: (cxt) => const SignupScreen()));
                         },
-                        child: const Text("Don't Have a Account? SignUp"),
+                        child: const Text(
+                          "Don't Have a Account? SignUp",
+                          style: TextStyle(color: AppColors.textLigth),
+                        ),
                       )
                     ],
                   ),
