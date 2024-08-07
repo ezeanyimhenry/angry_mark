@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/birdcard_screen.dart';
+import '../birdcard_screen.dart';
 
 class CharacterScreen extends StatefulWidget {
   const CharacterScreen({super.key});

@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:angry_mark/utils/sound_utils.dart';
+import 'package:angry_mark/utils/sound/sound_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:angry_mark/main_screen.dart'; // Assuming MainMenu is the first screen
+import 'package:angry_mark/screens/home_screen.dart'; // Assuming MainMenu is the first screen
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -35,7 +35,7 @@ class SplashScreenState extends State<SplashScreen>
       SoundUtils().loopAppSound();
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainMenu()),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     });
   }
