@@ -48,7 +48,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   const Text(
                     'Welcome to Angry MARK!',
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 30.0,
                       color: AppColors.cardLight,
                     ),
                   ),
@@ -58,7 +58,6 @@ class _SignupScreenState extends State<SignupScreen> {
                       key: _formKey,
                       child: Column(
                         children: [
-                          //for name field
                           TextFormField(
                             cursorColor: AppColors.textLigth,
                             style: const TextStyle(
@@ -83,8 +82,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                 child: Text(
                                   'Name',
                                   style: TextStyle(
-                                      color: AppColors.textLigth,
-                                      fontSize: 15.0),
+                                    color: AppColors.textLigth,
+                                    fontSize: 15.0,
+                                  ),
                                 ),
                               ),
                             ),
@@ -109,14 +109,16 @@ class _SignupScreenState extends State<SignupScreen> {
                                 if (_formKey.currentState!.validate()) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                        content: Text('Processing Data')),
+                                      content: Text('Processing Data'),
+                                    ),
                                   );
                                 }
-
                                 Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (cxt) => const MainMenu()));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (cxt) => const MainMenu(),
+                                  ),
+                                );
                               },
                               child: const Text(
                                 'SignUp',
@@ -130,9 +132,11 @@ class _SignupScreenState extends State<SignupScreen> {
                           TextButton(
                             onPressed: () {
                               Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (cxt) => const AuthScreen()));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (cxt) => const AuthScreen(),
+                                ),
+                              );
                             },
                             child: const Text(
                               "Already Have an Account? SignIn",
