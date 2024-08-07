@@ -15,9 +15,10 @@ class PasswordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      cursorColor: AppColors.textLigth,
       style: const TextStyle(
         color: AppColors.textLigth,
-        fontSize: 13,
+        fontSize: 15.0,
       ),
       obscureText: isVisible,
       controller: passwordController,
@@ -50,7 +51,7 @@ class PasswordField extends StatelessWidget {
           padding: EdgeInsets.all(4.0),
           child: Text(
             'Password',
-            style: TextStyle(color: AppColors.textLigth, fontSize: 14.0),
+            style: TextStyle(color: AppColors.textLigth, fontSize: 15.0),
           ),
         ),
       ),
