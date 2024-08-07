@@ -1,3 +1,4 @@
+import 'package:angry_mark/forgot_password_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'main_screen.dart';
@@ -90,7 +91,12 @@ class _AuthScreenState extends State<AuthScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ForgotPasswordScreen(),
+                              ),
+                            ),
                             child: const Text('Forgot password?'),
                           ),
                         ],
