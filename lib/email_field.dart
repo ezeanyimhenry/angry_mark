@@ -9,6 +9,11 @@ class EmailField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      cursorColor: AppColors.textLigth,
+      style: const TextStyle(
+        color: AppColors.textLigth,
+        fontSize: 15.0,
+      ),
       controller: emailController,
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -26,7 +31,7 @@ class EmailField extends StatelessWidget {
           padding: EdgeInsets.all(4.0),
           child: Text(
             'Email',
-            style: TextStyle(color: AppColors.textLigth, fontSize: 14.0),
+            style: TextStyle(color: AppColors.textLigth, fontSize: 15.0),
           ),
         ),
       ),
