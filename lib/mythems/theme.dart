@@ -39,9 +39,7 @@ abstract class InputDecorTheme {
 abstract class AppElevatedButtonTheme {
   static final appElevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      // backgroundColor: primaryColor,
       foregroundColor: Colors.black,
-      // fixedSize: const Size(double.infinity, 64),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
