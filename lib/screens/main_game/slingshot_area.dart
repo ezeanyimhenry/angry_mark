@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:angry_mark/character.dart';
+import 'package:angry_mark/widgets/character/character.dart';
 
 class SlingshotArea extends StatefulWidget {
   final Character character;

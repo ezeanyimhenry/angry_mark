@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:angry_mark/character.dart';
-import 'package:angry_mark/obstacle.dart';
-import 'package:angry_mark/slingshot_area.dart';
+import 'package:angry_mark/widgets/character/character.dart';
+import 'package:angry_mark/widgets/obstacles/obstacle.dart';
+import 'package:angry_mark/screens/main_game/slingshot_area.dart';
 import 'package:flutter/services.dart';
 
 class GameScreen extends StatefulWidget {

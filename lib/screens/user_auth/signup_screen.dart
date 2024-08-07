@@ -2,10 +2,10 @@ import 'package:angry_mark/email_field.dart';
 import 'package:angry_mark/password_field.dart';
 import 'package:flutter/material.dart';
 
-import '../auth_screen.dart';
-import '../main_screen.dart';
-import '../mythems/theme.dart';
-import '../widgets/animation.dart';
+import 'auth_screen.dart';
+import '../home_screen.dart';
+import '../../mythems/theme.dart';
+import '../../widgets/animation.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -116,7 +116,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (cxt) => const MainMenu(),
+                                    builder: (cxt) => const HomeScreen(),
                                   ),
                                 );
                               },

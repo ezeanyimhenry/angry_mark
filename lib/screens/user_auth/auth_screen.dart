@@ -3,10 +3,10 @@ import 'package:angry_mark/forgot_password_screen.dart';
 import 'package:angry_mark/password_field.dart';
 import 'package:flutter/material.dart';
 
-import 'main_screen.dart';
-import 'mythems/theme.dart';
-import 'screens/signup_screen.dart';
-import 'widgets/animation.dart';
+import '../home_screen.dart';
+import '../../mythems/theme.dart';
+import 'signup_screen.dart';
+import '../../widgets/animation.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -98,7 +98,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (cxt) => const MainMenu()));
+                                    builder: (cxt) => const HomeScreen()));
                           },
                           child: const Text(
                             'SignIn',
