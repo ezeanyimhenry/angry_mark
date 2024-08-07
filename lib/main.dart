@@ -1,13 +1,11 @@
 import 'package:angry_mark/screens/splash_screen.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeRight,
-    DeviceOrientation.landscapeLeft,
-  ]);
+  Flame.device.setLandscape();
+  Flame.device.fullScreen();
   runApp(const MyApp());
 }
 
