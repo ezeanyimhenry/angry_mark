@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:angry_mark/utils/sound/sound_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:angry_mark/screens/home_screen.dart'; // Assuming MainMenu is the first screen
 
@@ -32,7 +31,6 @@ class SplashScreenState extends State<SplashScreen>
 
     // Navigate to MainMenu after 3 seconds
     Timer(const Duration(seconds: 3), () {
-      SoundUtils().loopAppSound();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomeScreen()),

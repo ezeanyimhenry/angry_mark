@@ -1,4 +1,5 @@
 import 'package:angry_mark/actors/player.dart';
+import 'package:angry_mark/notifiers/sound_notifier.dart';
 import 'package:angry_mark/screens/main_game/scoreboard_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -45,9 +46,10 @@ class Enemy extends BodyComponent with ContactCallbacks {
 
   @override
   void beginContact(Object other, Contact contact) {
+    final appVolume = SoundNotifer.instance.value;
     if (other is Player) {
       // Play the sound effect
-      FlameAudio.play('sfx/wood_collision.mp3', volume: 0.8);
+      FlameAudio.play('sfx/wood_collision.mp3', volume: appVolume);
       add(
         SpriteComponent()
           ..sprite = cloudSprite

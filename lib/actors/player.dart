@@ -1,4 +1,5 @@
 import 'package:angry_mark/actors/path_component.dart';
+import 'package:angry_mark/notifiers/sound_notifier.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -11,12 +12,14 @@ class Player extends BodyComponent with DragCallbacks {
   Vector2? _dragEndPosition;
   final double _gravity = 9.8;
   late DottedLineComponent dottedLine;
+
+  final appVolume = SoundNotifer.instance.value;
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     // Load and play background music
     FlameAudio.bgm.initialize();
-    FlameAudio.bgm.play('birds_intro.mp3', volume: 0.5);
+    FlameAudio.bgm.play('birds_intro.mp3', volume: appVolume);
     Future.delayed(const Duration(seconds: 10), FlameAudio.bgm.stop);
     renderBody = false;
     add(
@@ -87,11 +90,11 @@ class Player extends BodyComponent with DragCallbacks {
       final Vector2 dragVector = _dragStartPosition! - _dragEndPosition!;
       final double dragStrength = dragVector.length;
       final Vector2 impulse = dragVector.normalized() * dragStrength * 5000;
-      FlameAudio.play('sfx/launch.mp3', volume: 0.8);
+      FlameAudio.play('sfx/launch.mp3', volume: appVolume);
       FlameAudio.bgm.stop();
       Future.delayed(
         const Duration(milliseconds: 100),
-        () => FlameAudio.play('sfx/flying.mp3', volume: 0.8),
+        () => FlameAudio.play('sfx/flying.mp3', volume: appVolume),
       );
       // print('Body Velocity Before: ${body.linearVelocity}');
       body.applyLinearImpulse(impulse);
