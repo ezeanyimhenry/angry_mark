@@ -68,6 +68,7 @@ flutter:
     - assets/images/
     - assets/images/angrybird/
     - assets/images/extras/
+    - assets/images/characters/
     - assets/sounds/
     - assets/audio/
     - assets/audio/sfx/

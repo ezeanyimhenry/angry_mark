@@ -17,7 +17,7 @@ class MyGame extends Forge2DGame with PanDetector {
   Future<void> onLoad() async {
     super.onLoad();
 
-    final characterSprite = await loadSprite('angry-mark.gif');
+    final characterSprite = await loadSprite('angry-7.gif');
     final obstacleSprite = await loadSprite('angry-mark.gif');
 
     // Create and add the character sprite
