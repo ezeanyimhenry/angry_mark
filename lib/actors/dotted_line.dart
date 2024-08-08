@@ -1,5 +1,6 @@
 import 'package:angry_mark/actors/enemy.dart';
 import 'package:angry_mark/actors/player.dart';
+import 'package:angry_mark/notifiers/sound_notifier.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
@@ -44,9 +45,10 @@ class Obstacle extends BodyComponent with ContactCallbacks {
   @override
   void beginContact(Object other, Contact contact) {
     super.beginContact(other, contact);
+    final appVolume = SoundNotifer.instance.value;
     if (other is Player || other is Enemy) {
       // Play the sound effect
-      FlameAudio.play('sfx/wood_collision.mp3', volume: 0.8);
+      FlameAudio.play('sfx/wood_collision.mp3', volume: appVolume);
     }
   }
 }
