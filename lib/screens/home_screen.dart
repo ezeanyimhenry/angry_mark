@@ -23,14 +23,54 @@ class HomeScreen extends StatelessWidget {
           ),
           // Overlay content
           // Overlay content
-          Column(
-            children: <Widget>[
-              // Large Play Button
-              Expanded(
-                child: Center(
+          // Centered Buttons
+          const SizedBox(height: 20),
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 300,
+                  height: 70,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Navigate to game screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AuthScreen(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black.withOpacity(0.6),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.all(10),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Login',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        Icon(Icons.login),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20), // Spacing between buttons
+                SizedBox(
+                  width: 300,
+                  height: 70,
+                  child: ElevatedButton(
+                    onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -38,19 +78,31 @@ class HomeScreen extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      minimumSize:
-                          const Size(150, 150), // Adjust size as needed
-                      backgroundColor: Colors.white.withOpacity(0.8),
-                      foregroundColor: Colors.orange,
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(20),
-                      textStyle: const TextStyle(fontSize: 24),
+                      backgroundColor: Colors.black.withOpacity(0.6),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.all(10),
                     ),
-                    child: const Icon(Icons.play_arrow, size: 100),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Continue as guest',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        Icon(Icons.arrow_forward),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           // Instructions Button
           Positioned(
