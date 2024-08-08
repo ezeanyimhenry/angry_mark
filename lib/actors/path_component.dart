@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+
 class DottedLineComponent extends PositionComponent {
   List<Vector2> points;
   final Color color;

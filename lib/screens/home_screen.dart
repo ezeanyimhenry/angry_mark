@@ -1,12 +1,9 @@
-import 'package:angry_mark/screens/main_game/new.dart';
+import 'package:angry_mark/screens/main_game/game_screen.dart';
 import 'package:angry_mark/screens/user_auth/auth_screen.dart';
-// import 'package:angry_mark/screens/main_game/game_screen.dart';
 import 'package:angry_mark/screens/instructions/instructions_screen.dart';
 import 'package:angry_mark/widgets/character/angrybird_screen.dart';
 import 'package:angry_mark/screens/settings/settings_screen.dart';
 import 'package:flame/game.dart';
-// import 'package:angry_mark/instructions_screen.dart';
-// import 'package:angry_mark/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
