@@ -1,52 +1,41 @@
-import 'package:angry_mark/actors/enemy.dart';
-import 'package:angry_mark/actors/player.dart';
 import 'package:flame/components.dart';
-import 'package:flame_audio/flame_audio.dart';
-import 'package:flame_forge2d/flame_forge2d.dart';
-
-class Obstacle extends BodyComponent with ContactCallbacks {
+import 'package:flutter/material.dart';
+class DottedLineComponent extends PositionComponent {
+  List<Vector2> points;
+  final Color color;
+  final double strokeWidth;
+  final double dashLength;
+  final double gapLength;
+  DottedLineComponent({
+    required this.points,
+    this.color = Colors.red,
+    this.strokeWidth = 2.0,
+    this.dashLength = 5.0,
+    this.gapLength = 5.0,
+  });
   @override
-  final Vector2 position;
-  final Sprite sprite;
-
-  Obstacle(this.position, this.sprite);
-
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    renderBody = false;
-    add(
-      SpriteComponent()
-        ..sprite = sprite
-        ..anchor = Anchor.center
-        ..size = Vector2.all(40),
-    );
-    // Preload the sound effect
-    await FlameAudio.audioCache.load('sfx/wood_collision.mp3');
-  }
-
-  @override
-  Body createBody() {
-    final shape = PolygonShape();
-    final vertices = [
-      Vector2(-20, -20),
-      Vector2(20, -20),
-      Vector2(20, 20),
-      Vector2(-20, 20),
-    ];
-    shape.set(vertices);
-    final FixtureDef fixtureDef = FixtureDef(shape, friction: 0.3);
-    final BodyDef bodyDef =
-        BodyDef(userData: this, position: position, type: BodyType.dynamic);
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
-  }
-
-  @override
-  void beginContact(Object other, Contact contact) {
-    super.beginContact(other, contact);
-    if (other is Player || other is Enemy) {
-      // Play the sound effect
-      FlameAudio.play('sfx/wood_collision.mp3', volume: 0.8);
+  void render(Canvas canvas) {
+    if (points.isEmpty) return;
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth;
+    for (int i = 0; i < points.length - 1; i++) {
+      final start = points[i];
+      final end = points[i + 1];
+      final segmentLength = (end - start).length;
+      final direction = (end - start).normalized();
+      double distance = 0.0;
+      while (distance < segmentLength) {
+        final startPoint = start + direction * distance;
+        final endPoint = startPoint + direction * dashLength;
+        canvas.drawLine(
+          Offset(startPoint.x, startPoint.y),
+          Offset(endPoint.x, endPoint.y),
+          paint,
+        );
+        distance += dashLength + gapLength;
+      }
     }
   }
 }
