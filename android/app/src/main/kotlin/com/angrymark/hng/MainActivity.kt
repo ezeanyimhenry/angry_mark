@@ -1,4 +1,4 @@
-package com.example.angry_mark
+package com.angrymark.hng
 
 import io.flutter.embedding.android.FlutterActivity
 
