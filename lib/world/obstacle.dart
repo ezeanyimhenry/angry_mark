@@ -39,7 +39,13 @@ class Obstacle extends BodyComponent with ContactCallbacks {
     final FixtureDef fixtureDef = FixtureDef(shape, friction: 0.3);
     final BodyDef bodyDef =
         BodyDef(userData: this, position: position, type: BodyType.dynamic);
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
+    final body = world.createBody(bodyDef)..createFixture(fixtureDef);
+
+    // Set the body's position and velocity to ensure it starts in place
+    body.position.setFrom(position);
+    body.linearVelocity = Vector2.zero(); // Stop any initial movement
+
+    return body;
   }
 
   @override

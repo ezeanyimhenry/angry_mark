@@ -4,6 +4,7 @@ import 'package:angry_mark/screens/main_game/scoreboard_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
+
 class Enemy extends BodyComponent with ContactCallbacks {
   @override
   final Vector2 position;
@@ -25,6 +26,7 @@ class Enemy extends BodyComponent with ContactCallbacks {
     // Preload the sound effect
     await FlameAudio.audioCache.load('sfx/wood_collision.mp3');
   }
+
   @override
   Body createBody() {
     final shape = CircleShape()..radius = 20;
@@ -33,8 +35,15 @@ class Enemy extends BodyComponent with ContactCallbacks {
         userData: this,
         position: position,
         type: BodyType.dynamic); // Dynamic body
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
+    final body = world.createBody(bodyDef)..createFixture(fixtureDef);
+
+    // Set the body's position and velocity to ensure it starts in place
+    body.position.setFrom(position);
+    body.linearVelocity = Vector2.zero(); // Stop any initial movement
+
+    return body;
   }
+
   @override
   void beginContact(Object other, Contact contact) {
     final appVolume = SoundNotifer.instance.value;

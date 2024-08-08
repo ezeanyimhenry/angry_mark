@@ -68,6 +68,7 @@ flutter:
     - assets/images/angrybird/
     - assets/images/extras/
     - assets/audio/sounds/
+    - assets/images/characters/
     - assets/audio/
     - assets/audio/sfx/
   #   - images/a_dot_ham.jpeg

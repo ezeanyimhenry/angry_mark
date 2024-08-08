@@ -11,9 +11,6 @@ class Player extends BodyComponent with DragCallbacks {
   Vector2? _dragStartPosition;
   Vector2? _dragEndPosition;
   final double _gravity = 9.8;
-  // Define your camera properties here
-  final Vector2 _cameraPosition = Vector2.zero();
-  final double _cameraZoom = 1.0;
   late DottedLineComponent dottedLine;
 
   final appVolume = SoundNotifer.instance.value;
@@ -28,6 +25,7 @@ class Player extends BodyComponent with DragCallbacks {
     add(
       SpriteComponent()
         ..sprite = await game.loadSprite('char1.png')
+        ..flipVertically()
         ..size = Vector2.all(40)
         ..anchor = Anchor.center,
     );
@@ -40,6 +38,7 @@ class Player extends BodyComponent with DragCallbacks {
     );
     add(dottedLine);
   }
+
   @override
   Body createBody() {
     final Shape shape = CircleShape()..radius = 20;
@@ -51,18 +50,21 @@ class Player extends BodyComponent with DragCallbacks {
     final FixtureDef fixtureDef = FixtureDef(shape, friction: 0.5);
     return world.createBody(bodyDef)..createFixture(fixtureDef);
   }
+
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
-    _dragStartPosition = Vector2(0, 0);
+    // _dragStartPosition = Vector2(0, 0);
+    _dragStartPosition = screenToWorld(event.canvasPosition);
     // Initialize trajectory points with a basic forward direction
     if (_dragStartPosition != null) {
       trajectoryPoints.clear();
       trajectoryPoints
-          .addAll(calculateTrajectory(_dragStartPosition!, Vector2(100, 0)));
+          .addAll(calculateTrajectory(_dragStartPosition!, Vector2.zero()));
       dottedLine.points = trajectoryPoints;
     }
   }
+
   @override
   void onDragUpdate(DragUpdateEvent event) {
     // ignore: deprecated_member_use
@@ -70,47 +72,65 @@ class Player extends BodyComponent with DragCallbacks {
     if (_dragStartPosition != null && _dragEndPosition != null) {
       final Vector2 dragVector = _dragStartPosition! - _dragEndPosition!;
       final double dragStrength = dragVector.length;
-      final Vector2 impulse = dragVector.normalized() * dragStrength * 1000;
+      final Vector2 impulse =
+          dragVector.normalized() * dragStrength * 5000; // Adjusted impulse
       trajectoryPoints.clear();
       trajectoryPoints
           .addAll(calculateTrajectory(_dragStartPosition!, impulse));
       dottedLine.points = trajectoryPoints;
+
+      // print('Trajectory Points: $trajectoryPoints'); // Debugging output
     }
   }
+
   @override
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
     if (_dragStartPosition != null && _dragEndPosition != null) {
       final Vector2 dragVector = _dragStartPosition! - _dragEndPosition!;
       final double dragStrength = dragVector.length;
-      final Vector2 impulse = dragVector.normalized() * dragStrength * 1000;
+      final Vector2 impulse = dragVector.normalized() * dragStrength * 5000;
       FlameAudio.play('sfx/launch.mp3', volume: appVolume);
       FlameAudio.bgm.stop();
       Future.delayed(
         const Duration(milliseconds: 100),
         () => FlameAudio.play('sfx/flying.mp3', volume: appVolume),
       );
+      // print('Body Velocity Before: ${body.linearVelocity}');
       body.applyLinearImpulse(impulse);
+      // print('Body Velocity After: ${body.linearVelocity}');
       _dragStartPosition = null;
       _dragEndPosition = null;
       trajectoryPoints.clear();
       dottedLine.points = trajectoryPoints;
     }
   }
+
   Vector2 screenToWorld(Vector2 screenPosition) {
-    final viewportSize = game.size;
-    final scale = _cameraZoom;
-    final screenCenter = viewportSize / 2;
-    return (screenPosition - screenCenter) / scale + _cameraPosition;
+    final camera = game.camera;
+    final viewportSize = camera.viewport.size;
+    final cameraPosition = camera.viewport.position;
+
+    // Correct the coordinate transformation
+    final worldX = (screenPosition.x / camera.viewfinder.zoom) +
+        cameraPosition.x -
+        (viewportSize.x / 2) / camera.viewfinder.zoom;
+    final worldY = (screenPosition.y / camera.viewfinder.zoom) +
+        cameraPosition.y -
+        (viewportSize.y / 2) / camera.viewfinder.zoom;
+
+    return Vector2(worldX, worldY);
   }
+
   List<Vector2> calculateTrajectory(Vector2 startPosition, Vector2 impulse,
       {double friction = 0.5}) {
     List<Vector2> points = [];
     const double timeStep = 0.1;
-    const double maxTime = 2.0;
+    const double maxTime = 3.0;
     double time = 0.0;
     Vector2 velocity = impulse;
     Vector2 position = startPosition;
+
     while (time < maxTime) {
       time += timeStep;
       // Apply friction
@@ -121,7 +141,9 @@ class Player extends BodyComponent with DragCallbacks {
       position += velocity * timeStep;
       position.y -= 0.5 * _gravity * timeStep * timeStep;
       points.add(position);
-      if (time >= 1) break;
+
+      // Stop if trajectory goes below the visible area
+      if (position.y > game.size.y) break;
     }
     return points;
   }
