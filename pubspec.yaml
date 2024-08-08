@@ -39,6 +39,7 @@ dependencies:
   flame: ^1.18.0
   flame_forge2d: ^0.18.1
   audioplayers: ^6.0.0
+  flame_audio: ^2.10.2
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +69,8 @@ flutter:
     - assets/images/angrybird/
     - assets/images/extras/
     - assets/sounds/
+    - assets/audio/
+    - assets/audio/sfx/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
