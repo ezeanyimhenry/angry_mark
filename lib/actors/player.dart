@@ -25,7 +25,7 @@ class Player extends BodyComponent with DragCallbacks {
     add(
       SpriteComponent()
         ..sprite = await game.loadSprite('char1.png')
-        ..flipVertically()
+        ..flipHorizontally()
         ..size = Vector2.all(40)
         ..anchor = Anchor.center,
     );
