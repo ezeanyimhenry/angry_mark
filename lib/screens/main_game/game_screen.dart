@@ -32,7 +32,7 @@ class MyGame extends Forge2DGame with DragCallbacks {
     loadLevel(currentLevelIndex);
   }
 
-  final double speedFactor = 3.0;
+  final double speedFactor = 1.0;
 
   @override
   void update(double dt) {
