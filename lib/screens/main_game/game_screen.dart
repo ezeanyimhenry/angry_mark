@@ -4,6 +4,7 @@ import 'package:angry_mark/actors/player.dart';
 import 'package:angry_mark/screens/main_game/level_display.dart';
 import 'package:angry_mark/screens/main_game/models/game_state.dart';
 import 'package:angry_mark/screens/main_game/scoreboard_component.dart';
+import 'package:angry_mark/screens/main_game/slingshort.dart';
 import 'package:angry_mark/world/ground.dart';
 import 'package:angry_mark/world/obstacle.dart';
 import 'package:flame/camera.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 
 class MyGame extends Forge2DGame with DragCallbacks {
   Player? player;
+  Slingshot? slingshot;
   late ScoreboardComponent scoreboard;
   late GameState gameState;
   int currentLevelIndex = 0;
@@ -99,9 +101,15 @@ class MyGame extends Forge2DGame with DragCallbacks {
       final enemyPosition = Vector2(position.x, groundLevel - position.y);
       await addEnemy(enemyPosition, 'pig.webp', scoreboard);
     }
+
+    slingshot = Slingshot(this);
+    add(slingshot!);
+
+    slingshot!.position = Vector2(player!.position.x, player!.position.y);
   }
 
   void restartLevel() {
+    player!.hasPlayerBeenDragged = false;
     // Clear existing components
     for (final component in children.toList()) {
       remove(component);
