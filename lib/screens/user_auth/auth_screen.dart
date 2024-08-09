@@ -2,8 +2,10 @@ import 'package:angry_mark/email_field.dart';
 import 'package:angry_mark/forgot_password_screen.dart';
 import 'package:angry_mark/password_field.dart';
 import 'package:flutter/material.dart';
+import 'package:kimko_auth/kimko_auth.dart';
 
-import '../home_screen.dart';
+import '../../main.dart';
+
 import '../../mythems/theme.dart';
 import 'signup_screen.dart';
 import '../../widgets/animation.dart';
@@ -86,28 +88,36 @@ class _AuthScreenState extends State<AuthScreen> {
                       SizedBox(
                         height: 50,
                         width: MediaQuery.of(context).size.width * 0.3,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Processing Data')),
-                              );
-                            }
-
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (cxt) => const HomeScreen()));
-                          },
-                          child: const Text(
-                            'SignIn',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                        child: _isVisible
+                            ? ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text('Processing Data')),
+                                    );
+                                    signIn(context);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Fill the fields correctly')),
+                                    );
+                                  }
+                                  // Navigator.pushReplacement(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (cxt) => const HomeScreen()));
+                                },
+                                child: const Text(
+                                  'SignIn',
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              )
+                            : const CircularProgressIndicator(),
                       ),
                       TextButton(
                         onPressed: () {
@@ -130,5 +140,47 @@ class _AuthScreenState extends State<AuthScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> signIn(BuildContext context) async {
+    try {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Kimiko Package is down, try again')),
+      );
+      // setState(() {
+      //   // _isVisible = false;
+      // });
+      var res = await kimkoAuth.signIn(
+          email: email.text.trim(), password: password.text.trim());
+      if (res.isSuccess) {
+        res.data;
+        debugPrint(res.data);
+        setState(() {
+          _isVisible = true;
+        });
+      } else {
+        res.data;
+        debugPrint(res.data);
+        setState(() {
+          _isVisible = true;
+        });
+      }
+    } on KimikoException catch (e) {
+      setState(() {
+        _isVisible = true;
+      });
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Kimiko ${e.error}')),
+      // );
+      debugPrint('Kimiko ${e.error}');
+    } catch (e) {
+      setState(() {
+        _isVisible = true;
+      });
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Kimiko $e')),
+      // );
+      debugPrint("Another error $e");
+    }
   }
 }

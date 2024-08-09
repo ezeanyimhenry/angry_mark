@@ -3,7 +3,7 @@ import 'package:angry_mark/password_field.dart';
 import 'package:flutter/material.dart';
 
 import 'auth_screen.dart';
-import '../home_screen.dart';
+
 import '../../mythems/theme.dart';
 import '../../widgets/animation.dart';
 
@@ -112,13 +112,19 @@ class _SignupScreenState extends State<SignupScreen> {
                                       content: Text('Processing Data'),
                                     ),
                                   );
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Kimiko Package is down, try again')),
+                                  );
                                 }
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (cxt) => const HomeScreen(),
-                                  ),
-                                );
+                                // Navigator.pushReplacement(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (cxt) => const HomeScreen(),
+                                //   ),
+                                // );
                               },
                               child: const Text(
                                 'SignUp',

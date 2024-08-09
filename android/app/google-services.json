@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "889477084684",
+    "project_id": "angry-mark",
+    "storage_bucket": "angry-mark.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889477084684:android:1af05f4c357804e6c7e029",
+        "android_client_info": {
+          "package_name": "com.angryman.hng"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBy1WIjOOnPysSuETPw65nylZw9wfCkJwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyD-QxJT7zNs16f3gLb-HXVO6qWT-Ixp5NI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>889477084684</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.angryMark.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>angry-mark</string>
+	<key>STORAGE_BUCKET</key>
+	<string>angry-mark.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:889477084684:ios:2b2cc92cd1311c0fc7e029</string>
+</dict>
+</plist>
