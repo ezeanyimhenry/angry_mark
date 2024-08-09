@@ -141,6 +141,11 @@ class Player extends BodyComponent with DragCallbacks {
       gameState.endLevel(checkWinCondition());
       removeFromParent();
     }
+
+    if (_dragEndPosition != null && !gameState.hasEnemies) {
+      gameState.endLevel(true);
+      removeFromParent();
+    }
   }
 
   bool checkWinCondition() {

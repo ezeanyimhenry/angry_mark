@@ -16,6 +16,7 @@ class MyGame extends Forge2DGame with DragCallbacks {
   late ScoreboardComponent scoreboard;
   late GameState gameState;
   int currentLevelIndex = 0;
+  late double groundLevel;
 
   MyGame(BuildContext context) {
     gameState = GameState(context, this);
@@ -43,7 +44,13 @@ class MyGame extends Forge2DGame with DragCallbacks {
         size: size,
       ),
     );
-    add(Ground(size));
+    final ground = Ground(size);
+    add(ground);
+
+    // Wait until ground is fully loaded to get the correct ground level
+    await ground.onLoad();
+    groundLevel = ground.groundLevel;
+
     player = Player(gameState);
     add(player!);
 
@@ -63,15 +70,29 @@ class MyGame extends Forge2DGame with DragCallbacks {
     final screenSize = size;
     scoreboard.position = Vector2(screenSize.x - scoreboard.size.x - 100, 10);
 
+    // // Add obstacles
+    // for (final position in levelData.obstaclePositions) {
+    //   addObstacle(position, 'crate.png');
+    // }
+
+    // // Add enemies
+    // for (int i = 0; i < levelData.enemyCount; i++) {
+    //   final position = levelData.enemyPositions[i];
+    //   await addEnemy(position, 'pig.webp', scoreboard);
+    // }
+    // Add obstacles
     // Add obstacles
     for (final position in levelData.obstaclePositions) {
-      addObstacle(position, 'crate.png');
+      // Position obstacles relative to the ground
+      final obstaclePosition = Vector2(position.x, groundLevel - position.y);
+      await addObstacle(obstaclePosition, 'crate.png');
     }
 
     // Add enemies
     for (int i = 0; i < levelData.enemyCount; i++) {
       final position = levelData.enemyPositions[i];
-      await addEnemy(position, 'pig.webp', scoreboard);
+      final enemyPosition = Vector2(position.x, groundLevel - position.y);
+      await addEnemy(enemyPosition, 'pig.webp', scoreboard);
     }
   }
 
