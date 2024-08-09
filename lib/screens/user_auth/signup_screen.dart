@@ -112,13 +112,19 @@ class _SignupScreenState extends State<SignupScreen> {
                                       content: Text('Processing Data'),
                                     ),
                                   );
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Kimiko Package is down, try again')),
+                                  );
                                 }
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (cxt) => const HomeScreen(),
-                                  ),
-                                );
+                                // Navigator.pushReplacement(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (cxt) => const HomeScreen(),
+                                //   ),
+                                // );
                               },
                               child: const Text(
                                 'SignUp',
