@@ -15,6 +15,8 @@ class Player extends BodyComponent with DragCallbacks {
   Vector2? _dragEndPosition;
   final double _gravity = 9.8;
   late TrajectoryLineComponent trajectoryLine;
+  bool hasPlayerBeenDragged = false;
+  final double playerRadius = 20.0;
 
   Vector2 velocity = Vector2.zero();
 
@@ -42,45 +44,69 @@ class Player extends BodyComponent with DragCallbacks {
 
   @override
   Body createBody() {
-    final Shape shape = CircleShape()..radius = 20;
+    final double groundLevel = game.size.y * 0.78;
+
+    final Shape shape = CircleShape()..radius = playerRadius;
     final BodyDef bodyDef = BodyDef(
       userData: this,
-      position: Vector2(100, 0),
+      position: Vector2(100, groundLevel - playerRadius),
       type: BodyType.dynamic,
     );
-    final FixtureDef fixtureDef = FixtureDef(shape, friction: 0.5);
+
+    final FixtureDef fixtureDef = FixtureDef(
+      shape,
+      density: 1.0,
+      friction: 0.5,
+      restitution: 0.5,
+    );
     return world.createBody(bodyDef)..createFixture(fixtureDef);
   }
 
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
-    _dragStartPosition = body.position;
+    if (!hasPlayerBeenDragged) {
+      _dragStartPosition = body.position;
+    }
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
-    // ignore: deprecated_member_use
-    _dragEndPosition = screenToWorld(event.canvasPosition);
-    if (_dragStartPosition != null && _dragEndPosition != null) {
-      final Vector2 dragVector = Vector2.zero() - _dragEndPosition!;
-      final double dragStrength = dragVector.length;
-      final Vector2 impulse = dragVector.normalized() * dragStrength * 1000;
+    if (!hasPlayerBeenDragged) {
+      // ignore: deprecated_member_use
+      _dragEndPosition = screenToWorld(event.canvasPosition);
+      if (_dragStartPosition != null && _dragEndPosition != null) {
+        // Calculate the drag vector
+        final Vector2 dragVector = _dragEndPosition! - _dragStartPosition!;
+        final double dragStrength = dragVector.length;
 
-      trajectoryPoints.clear();
-      trajectoryPoints.addAll(calculateTrajectory(body.position, impulse));
-      trajectoryLine.points = trajectoryPoints;
+        // Ensure the impulse calculation is correct
+        final Vector2 impulse = -dragVector.normalized() * dragStrength * 10000;
+
+        trajectoryPoints.clear();
+        trajectoryPoints
+            .addAll(calculateTrajectory(_dragStartPosition!, impulse));
+        trajectoryLine.points = trajectoryPoints;
+      }
     }
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
-    if (_dragStartPosition != null && _dragEndPosition != null) {
-      final Vector2 dragVector = _dragStartPosition! - _dragEndPosition!;
+    if (!hasPlayerBeenDragged &&
+        _dragStartPosition != null &&
+        _dragEndPosition != null) {
+      // Calculate the drag vector
+      final Vector2 dragVector = _dragEndPosition! - _dragStartPosition!;
       final double dragStrength = dragVector.length;
-      final Vector2 impulse = dragVector.normalized() * dragStrength * 1000;
+
+      final Vector2 impulse = -dragVector.normalized() * dragStrength * 10000;
+
+      trajectoryPoints.clear();
+      trajectoryPoints.addAll(calculateTrajectory(body.position, impulse));
+      trajectoryLine.points = trajectoryPoints;
 
       FlameAudio.play('sfx/launch.mp3', volume: 0.8);
       FlameAudio.bgm.stop();
@@ -88,12 +114,12 @@ class Player extends BodyComponent with DragCallbacks {
         const Duration(milliseconds: 100),
         () => FlameAudio.play('sfx/flying.mp3', volume: 0.8),
       );
+
       body.applyLinearImpulse(impulse, point: body.worldCenter);
       _dragStartPosition = null;
       _dragEndPosition = null;
-      trajectoryPoints.clear();
-      trajectoryPoints.addAll(calculateTrajectory(body.position, impulse));
-      trajectoryLine.points = trajectoryPoints;
+
+      hasPlayerBeenDragged = true;
     }
   }
 
@@ -107,8 +133,14 @@ class Player extends BodyComponent with DragCallbacks {
     return Vector2(worldX, worldY);
   }
 
-  List<Vector2> calculateTrajectory(Vector2 startPosition, Vector2 impulse,
-      {double friction = 0.5}) {
+  void applyImpulse(Vector2 impulse) {
+    body.applyLinearImpulse(impulse, point: body.worldCenter);
+  }
+
+  List<Vector2> calculateTrajectory(
+    Vector2 startPosition,
+    Vector2 impulse,
+  ) {
     List<Vector2> points = [];
     const double timeStep = 0.1;
     const double maxTime = 3.0;
@@ -120,9 +152,6 @@ class Player extends BodyComponent with DragCallbacks {
       time += timeStep;
       // Apply gravity
       velocity.y -= _gravity * timeStep;
-      // Apply friction
-      velocity.x *= (1 - friction * timeStep);
-      velocity.y *= (1 - friction * timeStep);
       // Update position
       position += velocity * timeStep;
       points.add(position);
@@ -136,14 +165,17 @@ class Player extends BodyComponent with DragCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
+    // print("Dragged: $hasPlayerBeenDragged");
+    final groundLevel = (game.size.y * .78).toStringAsFixed(2);
+    final approximatePosition =
+        (body.position.y + playerRadius).toStringAsFixed(2);
+    double approximatePositionDouble = double.parse(approximatePosition);
+    double groundLevelDouble = double.parse(groundLevel);
 
-    if (body.position.y > game.size.y) {
+    // Check if player touches the ground
+    if (hasPlayerBeenDragged &&
+        (approximatePositionDouble == groundLevelDouble)) {
       gameState.endLevel(checkWinCondition());
-      removeFromParent();
-    }
-
-    if (_dragEndPosition != null && !gameState.hasEnemies) {
-      gameState.endLevel(true);
       removeFromParent();
     }
   }
