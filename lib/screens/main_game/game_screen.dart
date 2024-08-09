@@ -30,6 +30,13 @@ class MyGame extends Forge2DGame with DragCallbacks {
     loadLevel(currentLevelIndex);
   }
 
+  final double speedFactor = 3.0;
+
+  @override
+  void update(double dt) {
+    super.update(dt * speedFactor);
+  }
+
   Future<void> loadLevel(int levelIndex) async {
     if (levelIndex < 0 || levelIndex >= levels.length) {
       // Handle invalid level index
@@ -75,6 +82,9 @@ class MyGame extends Forge2DGame with DragCallbacks {
     // Add Level Display
     levelDisplay = LevelDisplayComponent(level: currentLevelIndex + 1);
     add(levelDisplay);
+
+    levelDisplay.position =
+        Vector2(screenSize.x - (screenSize.x - levelDisplay.size.x) + 100, 10);
 
     // Add obstacles
     for (final position in levelData.obstaclePositions) {

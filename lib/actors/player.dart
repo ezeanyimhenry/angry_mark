@@ -16,6 +16,8 @@ class Player extends BodyComponent with DragCallbacks {
   final double _gravity = 9.8;
   late TrajectoryLineComponent trajectoryLine;
 
+  Vector2 velocity = Vector2.zero();
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -54,9 +56,6 @@ class Player extends BodyComponent with DragCallbacks {
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
     _dragStartPosition = body.position;
-    // _dragStartPosition = screenToWorld(event.canvasPosition);
-    // print("DragStarted: $_dragStartPosition");
-    // print("Player Position: $position");
   }
 
   @override
@@ -137,6 +136,7 @@ class Player extends BodyComponent with DragCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
+
     if (body.position.y > game.size.y) {
       gameState.endLevel(checkWinCondition());
       removeFromParent();
