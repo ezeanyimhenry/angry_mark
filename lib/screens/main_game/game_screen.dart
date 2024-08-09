@@ -24,6 +24,7 @@ class MyGame extends Forge2DGame with DragCallbacks {
 
   MyGame(BuildContext context) {
     gameState = GameState(context, this);
+    world.gravity = Vector2(0, 9.8);
   }
 
   @override

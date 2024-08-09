@@ -55,7 +55,8 @@ class Player extends BodyComponent with DragCallbacks {
 
     final FixtureDef fixtureDef = FixtureDef(
       shape,
-      friction: 0.1,
+      density: 1.0,
+      friction: 0.5,
       restitution: 0.5,
     );
     return world.createBody(bodyDef)..createFixture(fixtureDef);
