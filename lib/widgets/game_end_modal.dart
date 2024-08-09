@@ -25,7 +25,7 @@ class GameEndModal extends StatelessWidget {
             Image.asset(
               playerWon
                   ? 'assets/images/win_cup.webp'
-                  : 'assets/images/lost_image.webp',
+                  : 'assets/images/characters/6.png',
               height: 150,
             ),
             const SizedBox(height: 20),

@@ -101,7 +101,7 @@ class MyGame extends Forge2DGame with DragCallbacks {
     for (int i = 0; i < levelData.enemyCount; i++) {
       final position = levelData.enemyPositions[i];
       final enemyPosition = Vector2(position.x, groundLevel - position.y);
-      await addEnemy(enemyPosition, 'pig.webp', scoreboard);
+      await addEnemy(enemyPosition, 'characters/2.png', scoreboard);
     }
 
     slingshot = Slingshot(this);
