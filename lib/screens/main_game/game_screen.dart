@@ -1,6 +1,7 @@
 import 'package:angry_mark/Levels/levels_data.dart';
 import 'package:angry_mark/actors/enemy.dart';
 import 'package:angry_mark/actors/player.dart';
+import 'package:angry_mark/screens/main_game/level_display.dart';
 import 'package:angry_mark/screens/main_game/models/game_state.dart';
 import 'package:angry_mark/screens/main_game/scoreboard_component.dart';
 import 'package:angry_mark/world/ground.dart';
@@ -16,6 +17,7 @@ class MyGame extends Forge2DGame with DragCallbacks {
   late ScoreboardComponent scoreboard;
   late GameState gameState;
   int currentLevelIndex = 0;
+  late LevelDisplayComponent levelDisplay;
   late double groundLevel;
 
   MyGame(BuildContext context) {
@@ -70,17 +72,10 @@ class MyGame extends Forge2DGame with DragCallbacks {
     final screenSize = size;
     scoreboard.position = Vector2(screenSize.x - scoreboard.size.x - 100, 10);
 
-    // // Add obstacles
-    // for (final position in levelData.obstaclePositions) {
-    //   addObstacle(position, 'crate.png');
-    // }
+    // Add Level Display
+    levelDisplay = LevelDisplayComponent(level: currentLevelIndex + 1);
+    add(levelDisplay);
 
-    // // Add enemies
-    // for (int i = 0; i < levelData.enemyCount; i++) {
-    //   final position = levelData.enemyPositions[i];
-    //   await addEnemy(position, 'pig.webp', scoreboard);
-    // }
-    // Add obstacles
     // Add obstacles
     for (final position in levelData.obstaclePositions) {
       // Position obstacles relative to the ground
