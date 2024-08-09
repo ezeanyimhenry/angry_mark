@@ -1,3 +1,4 @@
+import 'package:angry_mark/Levels/levels_data.dart';
 import 'package:angry_mark/actors/enemy.dart';
 import 'package:angry_mark/actors/player.dart';
 import 'package:angry_mark/screens/main_game/models/game_state.dart';
@@ -14,28 +15,38 @@ class MyGame extends Forge2DGame with DragCallbacks {
   Player? player;
   late ScoreboardComponent scoreboard;
   late GameState gameState;
+  int currentLevelIndex = 0;
 
   MyGame(BuildContext context) {
-    // Initialize GameState with context
-    gameState = GameState(context);
+    gameState = GameState(context, this);
   }
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    // camera.viewport = FixedResolutionViewport(resolution: Vector2(1400, 400));
+    loadLevel(currentLevelIndex);
+  }
+
+  Future<void> loadLevel(int levelIndex) async {
+    if (levelIndex < 0 || levelIndex >= levels.length) {
+      // Handle invalid level index
+      return;
+    }
+
+    final levelData = levels[levelIndex];
+
     camera.viewport = MaxViewport();
 
     add(
       SpriteComponent(
-          sprite: await loadSprite('game-background.jpeg'), size: size),
+        sprite: await loadSprite('game-background.jpeg'),
+        size: size,
+      ),
     );
     add(Ground(size));
-
     player = Player(gameState);
     add(player!);
 
-    // Create and add the scoreboard
     final scoreText = TextComponent(
       text: 'Score: 0',
       textRenderer: TextPaint(
@@ -49,25 +60,36 @@ class MyGame extends Forge2DGame with DragCallbacks {
     scoreboard = ScoreboardComponent(scoreText: scoreText);
     add(scoreboard);
 
-    // Position the scoreboard at the top-right corner
     final screenSize = size;
     scoreboard.position = Vector2(screenSize.x - scoreboard.size.x - 100, 10);
 
-// Positioning obstacles
-    const obstacleX = 600.0; // X position for all obstacles
-    const obstacleYStart = 160.0; // Starting Y position
-    const obstacleHeight = 40.0; // Height of each obstacle
-    const numObstacles = 5; // Number of obstacles to stack
-
-    // Add obstacles stacked on top of each other
-    for (int i = 0; i < numObstacles; i++) {
-      await addObstacle(
-        Vector2(obstacleX, obstacleYStart + i * obstacleHeight),
-        'crate.png',
-      );
+    // Add obstacles
+    for (final position in levelData.obstaclePositions) {
+      addObstacle(position, 'crate.png');
     }
 
-    await addEnemy(Vector2(600, 100), 'pig.webp', scoreboard);
+    // Add enemies
+    for (int i = 0; i < levelData.enemyCount; i++) {
+      final position = levelData.enemyPositions[i];
+      await addEnemy(position, 'pig.webp', scoreboard);
+    }
+  }
+
+  void restartLevel() {
+    // Clear existing components
+    for (final component in children.toList()) {
+      remove(component);
+    }
+    loadLevel(currentLevelIndex);
+  }
+
+  void nextLevel() {
+    if (currentLevelIndex < levels.length - 1) {
+      currentLevelIndex++;
+      loadLevel(currentLevelIndex);
+    } else {
+      // Handle case when there are no more levels
+    }
   }
 
   Future<void> addObstacle(Vector2 position, String spritePath) async {
