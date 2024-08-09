@@ -1,4 +1,3 @@
-import 'package:angry_mark/actors/path_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -10,17 +9,11 @@ class Player extends BodyComponent with DragCallbacks {
   Vector2? _dragStartPosition;
   Vector2? _dragEndPosition;
   final double _gravity = 9.8;
-  late DottedLineComponent dottedLine;
-
-  final Paint trajectoryPaint = Paint()
-    ..color = Colors.red
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 2.0;
+  late TrajectoryLineComponent trajectoryLine;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    // Load and play background music
     FlameAudio.bgm.initialize();
     FlameAudio.bgm.play('birds_intro.mp3', volume: 0.5);
     Future.delayed(const Duration(seconds: 10), FlameAudio.bgm.stop);
@@ -32,14 +25,12 @@ class Player extends BodyComponent with DragCallbacks {
         ..size = Vector2.all(40)
         ..anchor = Anchor.center,
     );
-    dottedLine = DottedLineComponent(
+    trajectoryLine = TrajectoryLineComponent(
       points: trajectoryPoints,
       color: Colors.red,
       strokeWidth: 2.0,
-      dashLength: 5.0,
-      gapLength: 5.0,
     );
-    add(dottedLine);
+    add(trajectoryLine);
   }
 
   @override
@@ -57,29 +48,25 @@ class Player extends BodyComponent with DragCallbacks {
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
-    _dragStartPosition = screenToWorld(event.canvasPosition);
-    if (_dragStartPosition != null) {
-      final Vector2 dragVector = Vector2.zero();
-      final double dragStrength = dragVector.length;
-      final Vector2 impulse = dragVector.normalized() * dragStrength * 5000;
-      trajectoryPoints.clear();
-      trajectoryPoints.addAll(calculateTrajectory(position, impulse));
-      dottedLine.points = trajectoryPoints;
-    }
+    _dragStartPosition = body.position;
+    // _dragStartPosition = screenToWorld(event.canvasPosition);
+    // print("DragStarted: $_dragStartPosition");
+    // print("Player Position: $position");
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
+    super.onDragUpdate(event);
     // ignore: deprecated_member_use
     _dragEndPosition = screenToWorld(event.canvasPosition);
     if (_dragStartPosition != null && _dragEndPosition != null) {
-      final Vector2 dragVector = position - _dragEndPosition!;
-      final Vector2 dragVector2 = _dragStartPosition! - _dragEndPosition!;
+      final Vector2 dragVector = Vector2.zero() - _dragEndPosition!;
       final double dragStrength = dragVector.length;
-      final Vector2 impulse =
-          dragVector.normalized() * dragStrength * 5000; // Adjusted impulse
+      final Vector2 impulse = dragVector.normalized() * dragStrength * 1000;
+
       trajectoryPoints.clear();
-      trajectoryPoints.addAll(calculateTrajectory(dragVector2, impulse));
+      trajectoryPoints.addAll(calculateTrajectory(body.position, impulse));
+      trajectoryLine.points = trajectoryPoints;
     }
   }
 
@@ -89,33 +76,29 @@ class Player extends BodyComponent with DragCallbacks {
     if (_dragStartPosition != null && _dragEndPosition != null) {
       final Vector2 dragVector = _dragStartPosition! - _dragEndPosition!;
       final double dragStrength = dragVector.length;
-      final Vector2 impulse = dragVector.normalized() * dragStrength * 5000;
+      final Vector2 impulse = dragVector.normalized() * dragStrength * 1000;
+
       FlameAudio.play('sfx/launch.mp3', volume: 0.8);
       FlameAudio.bgm.stop();
       Future.delayed(
         const Duration(milliseconds: 100),
         () => FlameAudio.play('sfx/flying.mp3', volume: 0.8),
       );
-      body.applyLinearImpulse(impulse);
+      body.applyLinearImpulse(impulse, point: body.worldCenter);
       _dragStartPosition = null;
       _dragEndPosition = null;
       trajectoryPoints.clear();
-      dottedLine.points = trajectoryPoints;
+      trajectoryPoints.addAll(calculateTrajectory(body.position, impulse));
+      trajectoryLine.points = trajectoryPoints;
     }
   }
 
   Vector2 screenToWorld(Vector2 screenPosition) {
     final camera = game.camera;
-    final viewportSize = camera.viewport.size;
-    final cameraPosition = camera.viewport.position;
+    final viewportSize = game.size;
 
-    // Correct the coordinate transformation
-    final worldX = (screenPosition.x / camera.viewfinder.zoom) +
-        cameraPosition.x -
-        (viewportSize.x / 2) / camera.viewfinder.zoom;
-    final worldY = (screenPosition.y / camera.viewfinder.zoom) +
-        cameraPosition.y -
-        (viewportSize.y / 2) / camera.viewfinder.zoom;
+    final worldX = (screenPosition.x / viewportSize.x) * camera.viewport.size.x;
+    final worldY = (screenPosition.y / viewportSize.y) * camera.viewport.size.y;
 
     return Vector2(worldX, worldY);
   }
@@ -131,28 +114,47 @@ class Player extends BodyComponent with DragCallbacks {
 
     while (time < maxTime) {
       time += timeStep;
-      velocity.x -= velocity.x * friction * timeStep;
-      velocity.y -=
-          (velocity.y * friction * timeStep) + (0.5 * _gravity * timeStep);
+      // Apply gravity
+      velocity.y -= _gravity * timeStep;
+      // Apply friction
+      velocity.x *= (1 - friction * timeStep);
+      velocity.y *= (1 - friction * timeStep);
+      // Update position
       position += velocity * timeStep;
-      position.y -= 0.5 * _gravity * timeStep * timeStep;
       points.add(position);
-
-      // if (position.y > game.size.y) break; // Stop if trajectory goes below the visible area
+      if (position.y > game.size.y) {
+        break;
+      }
     }
     return points;
   }
+}
+
+class TrajectoryLineComponent extends Component {
+  List<Vector2> points;
+  final Color color;
+  final double strokeWidth;
+
+  TrajectoryLineComponent({
+    required this.points,
+    required this.color,
+    required this.strokeWidth,
+  });
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
-    if (trajectoryPoints.isNotEmpty) {
-      final path = Path();
-      path.moveTo(trajectoryPoints.first.x, trajectoryPoints.first.y);
-      for (var point in trajectoryPoints.skip(1)) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth;
+
+    final path = Path();
+    if (points.isNotEmpty) {
+      path.moveTo(points.first.x, points.first.y);
+      for (var point in points.skip(1)) {
         path.lineTo(point.x, point.y);
       }
-      canvas.drawPath(path, trajectoryPaint);
+      canvas.drawPath(path, paint);
     }
   }
 }
