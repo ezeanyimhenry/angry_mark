@@ -2,8 +2,15 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 
 class Ground extends BodyComponent {
   final Vector2 gameSize;
+  late double groundLevel;
 
   Ground(this.gameSize) : super(renderBody: false);
+
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    groundLevel = gameSize.y * .78;
+  }
 
   @override
   Body createBody() {
