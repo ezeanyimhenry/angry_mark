@@ -1,4 +1,4 @@
-package com.angryman.hng
+package com.angrymark.hng
 
 import io.flutter.embedding.android.FlutterActivity
 
