@@ -50,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                const SizedBox(height:30),
                 SizedBox(
                   width: 300,
                   height: 70,
@@ -152,23 +153,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   width: 10,
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Navigate to instructions screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CharacterScreen()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueGrey,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.all(10),
-                    textStyle: const TextStyle(fontSize: 16),
-                  ),
-                  child: const Icon(Icons.person, size: 24),
-                ),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     // Navigate to instructions screen
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => const CharacterScreen()),
+                //     );
+                //   },
+                //   style: ElevatedButton.styleFrom(
+                //     backgroundColor: Colors.blueGrey,
+                //     foregroundColor: Colors.white,
+                //     padding: const EdgeInsets.all(10),
+                //     textStyle: const TextStyle(fontSize: 16),
+                //   ),
+                //   child: const Icon(Icons.person, size: 24),
+                // ),
               ],
             ),
           ),
@@ -185,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       shape: BoxShape.rectangle,
                       image: const DecorationImage(
                         image: AssetImage(
-                            'assets/images/angry-mark.jpeg'), // Profile image
+                            'assets/images/angry-mark.jpeg'), 
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.circular(10),
@@ -199,12 +200,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.transparent,
                       child: InkWell(
                         borderRadius:
-                            BorderRadius.circular(25), // Circular border radius
+                            BorderRadius.circular(25), 
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const AuthScreen(),
+                              builder: (context) => const CharacterScreen(),
                             ),
                           );
                         },
