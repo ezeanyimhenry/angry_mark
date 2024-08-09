@@ -3,7 +3,7 @@ import 'package:angry_mark/password_field.dart';
 import 'package:flutter/material.dart';
 
 import 'auth_screen.dart';
-import '../home_screen.dart';
+
 import '../../mythems/theme.dart';
 import '../../widgets/animation.dart';
 

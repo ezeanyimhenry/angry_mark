@@ -169,17 +169,17 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         _isVisible = true;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Kimiko ${e.error}')),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Kimiko ${e.error}')),
+      // );
       debugPrint('Kimiko ${e.error}');
     } catch (e) {
       setState(() {
         _isVisible = true;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Kimiko $e')),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Kimiko $e')),
+      // );
       debugPrint("Another error $e");
     }
   }
