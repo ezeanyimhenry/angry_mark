@@ -1,3 +1,4 @@
+import 'package:angry_mark/screens/main_game/models/game_state.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -5,6 +6,10 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
 class Player extends BodyComponent with DragCallbacks {
+  GameState gameState;
+
+  Player(this.gameState);
+
   final List<Vector2> trajectoryPoints = [];
   Vector2? _dragStartPosition;
   Vector2? _dragEndPosition;
@@ -127,6 +132,19 @@ class Player extends BodyComponent with DragCallbacks {
       }
     }
     return points;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (body.position.y > game.size.y) {
+      gameState.endLevel(checkWinCondition());
+      removeFromParent();
+    }
+  }
+
+  bool checkWinCondition() {
+    return !gameState.hasEnemies;
   }
 }
 

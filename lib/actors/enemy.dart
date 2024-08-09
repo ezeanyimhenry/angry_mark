@@ -1,5 +1,6 @@
 import 'package:angry_mark/actors/player.dart';
 import 'package:angry_mark/notifiers/sound_notifier.dart';
+import 'package:angry_mark/screens/main_game/models/game_state.dart';
 import 'package:angry_mark/screens/main_game/scoreboard_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -11,7 +12,8 @@ class Enemy extends BodyComponent with ContactCallbacks {
   final Sprite sprite;
   late Sprite cloudSprite;
   final ScoreboardComponent scoreboard;
-  Enemy(this.position, this.sprite, this.scoreboard);
+  final GameState gameState;
+  Enemy(this.position, this.sprite, this.scoreboard, this.gameState);
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -57,6 +59,7 @@ class Enemy extends BodyComponent with ContactCallbacks {
           ..size = Vector2.all(40),
       );
       scoreboard.increaseScore(10);
+      gameState.removeEnemy(this);
       Future.delayed(
         const Duration(milliseconds: 1100),
         removeFromParent,

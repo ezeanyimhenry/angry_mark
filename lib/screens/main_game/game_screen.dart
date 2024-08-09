@@ -1,5 +1,6 @@
 import 'package:angry_mark/actors/enemy.dart';
 import 'package:angry_mark/actors/player.dart';
+import 'package:angry_mark/screens/main_game/models/game_state.dart';
 import 'package:angry_mark/screens/main_game/scoreboard_component.dart';
 import 'package:angry_mark/world/ground.dart';
 import 'package:angry_mark/world/obstacle.dart';
@@ -12,6 +13,12 @@ import 'package:flutter/material.dart';
 class MyGame extends Forge2DGame with DragCallbacks {
   Player? player;
   late ScoreboardComponent scoreboard;
+  late GameState gameState;
+
+  MyGame(BuildContext context) {
+    // Initialize GameState with context
+    gameState = GameState(context);
+  }
 
   @override
   Future<void> onLoad() async {
@@ -24,7 +31,8 @@ class MyGame extends Forge2DGame with DragCallbacks {
           sprite: await loadSprite('game-background.jpeg'), size: size),
     );
     add(Ground(size));
-    player = Player();
+
+    player = Player(gameState);
     add(player!);
 
     // Create and add the scoreboard
@@ -60,15 +68,6 @@ class MyGame extends Forge2DGame with DragCallbacks {
     }
 
     await addEnemy(Vector2(600, 100), 'pig.webp', scoreboard);
-    // await addObstacle(Vector2(600, 160), 'crate.png');
-    // await addObstacle(Vector2(600, 172), 'crate.png');
-    // await addObstacle(Vector2(600, 184), 'crate.png');
-    // await addObstacle(Vector2(600, 196), 'crate.png');
-    // await addObstacle(Vector2(600, 208), 'crate.png');
-    // await addObstacle(Vector2(600, 208), 'crate.png');
-    // await addObstacle(Vector2(600, 220), 'crate.png');
-    // await addObstacle(Vector2(600, 220), 'crate.png');
-    // await addObstacle(Vector2(600, 220), 'crate.png');
   }
 
   Future<void> addObstacle(Vector2 position, String spritePath) async {
@@ -78,7 +77,9 @@ class MyGame extends Forge2DGame with DragCallbacks {
 
   Future<void> addEnemy(Vector2 position, String spritePath,
       ScoreboardComponent scoreboard) async {
-    final enemy = Enemy(position, await loadSprite(spritePath), scoreboard);
+    final enemy =
+        Enemy(position, await loadSprite(spritePath), scoreboard, gameState);
+    gameState.addEnemy(enemy);
     add(enemy);
   }
 

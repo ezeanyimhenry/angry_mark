@@ -95,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => GameWidget(game: MyGame())),
+                            builder: (context) =>
+                                GameWidget(game: MyGame(context))),
                       );
                     },
                     style: ElevatedButton.styleFrom(
