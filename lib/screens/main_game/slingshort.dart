@@ -42,7 +42,7 @@ class Slingshot extends PositionComponent with DragCallbacks {
     super.onDragEnd(event);
     final Vector2 dragVector = _dragStart - _dragEnd;
     final double dragStrength = dragVector.length;
-    final Vector2 impulse = dragVector.normalized() * dragStrength * 200000;
+    final Vector2 impulse = dragVector.normalized() * dragStrength * 1000;
 
     final player = (game as MyGame).player;
     player?.applyImpulse(impulse);

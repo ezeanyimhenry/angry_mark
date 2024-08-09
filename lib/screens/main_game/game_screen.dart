@@ -60,7 +60,8 @@ class MyGame extends Forge2DGame with DragCallbacks {
 
     // Wait until ground is fully loaded to get the correct ground level
     await ground.onLoad();
-    groundLevel = ground.groundLevel;
+    final initialGroundLevel = ground.groundLevel.toStringAsFixed(2);
+    groundLevel = double.parse(initialGroundLevel);
 
     player = Player(gameState);
     add(player!);

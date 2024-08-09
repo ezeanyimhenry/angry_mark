@@ -22,6 +22,7 @@ class GameState {
 
   void endLevel(bool playerWon) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return GameEndModal(

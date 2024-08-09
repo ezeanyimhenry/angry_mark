@@ -1,3 +1,5 @@
+import 'package:angry_mark/actors/enemy.dart';
+import 'package:angry_mark/screens/main_game/game_screen.dart';
 import 'package:angry_mark/screens/main_game/models/game_state.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -53,7 +55,11 @@ class Player extends BodyComponent with DragCallbacks {
       type: BodyType.dynamic,
     );
 
-    final FixtureDef fixtureDef = FixtureDef(shape, friction: 0.5);
+    final FixtureDef fixtureDef = FixtureDef(
+      shape,
+      friction: 0.1,
+      restitution: 0.5,
+    );
     return world.createBody(bodyDef)..createFixture(fixtureDef);
   }
 
@@ -72,12 +78,16 @@ class Player extends BodyComponent with DragCallbacks {
       // ignore: deprecated_member_use
       _dragEndPosition = screenToWorld(event.canvasPosition);
       if (_dragStartPosition != null && _dragEndPosition != null) {
-        final Vector2 dragVector = Vector2.zero() - _dragEndPosition!;
+        // Calculate the drag vector
+        final Vector2 dragVector = _dragEndPosition! - _dragStartPosition!;
         final double dragStrength = dragVector.length;
-        final Vector2 impulse = dragVector.normalized() * dragStrength * 200000;
+
+        // Ensure the impulse calculation is correct
+        final Vector2 impulse = -dragVector.normalized() * dragStrength * 10000;
 
         trajectoryPoints.clear();
-        trajectoryPoints.addAll(calculateTrajectory(body.position, impulse));
+        trajectoryPoints
+            .addAll(calculateTrajectory(_dragStartPosition!, impulse));
         trajectoryLine.points = trajectoryPoints;
       }
     }
@@ -89,9 +99,23 @@ class Player extends BodyComponent with DragCallbacks {
     if (!hasPlayerBeenDragged &&
         _dragStartPosition != null &&
         _dragEndPosition != null) {
-      final Vector2 dragVector = _dragStartPosition! - _dragEndPosition!;
+      // Calculate the drag vector
+      final Vector2 dragVector = _dragEndPosition! - _dragStartPosition!;
       final double dragStrength = dragVector.length;
-      final Vector2 impulse = dragVector.normalized() * dragStrength * 200000;
+
+      // Debug information
+      print('Drag Vector: $dragVector');
+      print('Drag Strength: $dragStrength');
+
+      // Ensure the impulse calculation is correct
+      final Vector2 impulse = -dragVector.normalized() * dragStrength * 10000;
+
+      // Debug information
+      print('Impulse: $impulse');
+
+      trajectoryPoints.clear();
+      trajectoryPoints.addAll(calculateTrajectory(body.position, impulse));
+      trajectoryLine.points = trajectoryPoints;
 
       FlameAudio.play('sfx/launch.mp3', volume: 0.8);
       FlameAudio.bgm.stop();
@@ -99,15 +123,26 @@ class Player extends BodyComponent with DragCallbacks {
         const Duration(milliseconds: 100),
         () => FlameAudio.play('sfx/flying.mp3', volume: 0.8),
       );
+
       body.applyLinearImpulse(impulse, point: body.worldCenter);
       _dragStartPosition = null;
       _dragEndPosition = null;
-      trajectoryPoints.clear();
-      trajectoryPoints.addAll(calculateTrajectory(body.position, impulse));
-      trajectoryLine.points = trajectoryPoints;
 
       hasPlayerBeenDragged = true;
     }
+  }
+
+  Enemy? findNearestEnemy() {
+    final game = this.game as MyGame;
+    if (game.gameState.enemies.isEmpty) return null;
+
+    // Find the closest enemy to the player
+    final playerPosition = body.position;
+    return game.gameState.enemies.reduce((closest, enemy) {
+      final distanceToCurrent = (playerPosition - enemy.position).length;
+      final distanceToClosest = (playerPosition - closest.position).length;
+      return distanceToCurrent < distanceToClosest ? enemy : closest;
+    });
   }
 
   Vector2 screenToWorld(Vector2 screenPosition) {
@@ -153,13 +188,15 @@ class Player extends BodyComponent with DragCallbacks {
   void update(double dt) {
     super.update(dt);
     // print("Dragged: $hasPlayerBeenDragged");
-    final groundLevel = game.size.y * .78;
+    final groundLevel = (game.size.y * .78).toStringAsFixed(2);
     final approximatePosition =
         (body.position.y + playerRadius).toStringAsFixed(2);
     double approximatePositionDouble = double.parse(approximatePosition);
+    double groundLevelDouble = double.parse(groundLevel);
 
     // Check if player touches the ground
-    if (hasPlayerBeenDragged && (approximatePositionDouble >= groundLevel)) {
+    if (hasPlayerBeenDragged &&
+        (approximatePositionDouble == groundLevelDouble)) {
       gameState.endLevel(checkWinCondition());
       removeFromParent();
     }
