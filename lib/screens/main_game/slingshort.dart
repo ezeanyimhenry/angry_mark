@@ -33,6 +33,7 @@ class Slingshot extends PositionComponent with DragCallbacks {
   @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
+    // ignore: deprecated_member_use
     _dragEnd = _screenToWorld(event.canvasPosition);
   }
 
