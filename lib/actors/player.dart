@@ -1,5 +1,3 @@
-import 'package:angry_mark/actors/enemy.dart';
-import 'package:angry_mark/screens/main_game/game_screen.dart';
 import 'package:angry_mark/screens/main_game/models/game_state.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -103,15 +101,7 @@ class Player extends BodyComponent with DragCallbacks {
       final Vector2 dragVector = _dragEndPosition! - _dragStartPosition!;
       final double dragStrength = dragVector.length;
 
-      // Debug information
-      print('Drag Vector: $dragVector');
-      print('Drag Strength: $dragStrength');
-
-      // Ensure the impulse calculation is correct
       final Vector2 impulse = -dragVector.normalized() * dragStrength * 10000;
-
-      // Debug information
-      print('Impulse: $impulse');
 
       trajectoryPoints.clear();
       trajectoryPoints.addAll(calculateTrajectory(body.position, impulse));
@@ -130,19 +120,6 @@ class Player extends BodyComponent with DragCallbacks {
 
       hasPlayerBeenDragged = true;
     }
-  }
-
-  Enemy? findNearestEnemy() {
-    final game = this.game as MyGame;
-    if (game.gameState.enemies.isEmpty) return null;
-
-    // Find the closest enemy to the player
-    final playerPosition = body.position;
-    return game.gameState.enemies.reduce((closest, enemy) {
-      final distanceToCurrent = (playerPosition - enemy.position).length;
-      final distanceToClosest = (playerPosition - closest.position).length;
-      return distanceToCurrent < distanceToClosest ? enemy : closest;
-    });
   }
 
   Vector2 screenToWorld(Vector2 screenPosition) {
